@@ -1,1 +1,37 @@
-//main scss
+@import './variables';
+@import './mixins';
+
+* {
+    box-sizing: border-box;
+    }
+
+html,
+body,
+#root {
+    height: 100%;
+    }
+
+body {
+    margin: 0;
+    font-family: $font-family-base;
+    background-color: $color-background;
+    color: $color-text;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+html.dark body {
+    background-color: $color-background-dark;
+    color: $color-text-dark;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
