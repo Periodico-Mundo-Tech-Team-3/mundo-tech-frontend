@@ -1,1 +1,19 @@
-//mixins scss
+@mixin flex($direction: row, $justify: flex-start, $align: stretch) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+    }
+
+@mixin responsive($breakpoint) {
+    @media (max-width: $breakpoint) {
+        @content;
+        }
+    }
+
+@mixin focus-visible {
+    &:focus-visible {
+        outline: 2px solid $color-primary;
+        outline-offset: 2px;
+        }
+    }
