@@ -18,7 +18,7 @@ const IconButton = ({
             onClick={onClick}
             {...rest}
             >
-            <Icon className="icon-button__icon" size{18} aria-hidden="true" />
+            <Icon className="icon-button__icon" size={18} aria-hidden="true" />
         </button>
     );
 }
