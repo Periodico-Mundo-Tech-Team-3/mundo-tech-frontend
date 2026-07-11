@@ -1,1 +1,65 @@
-// Buttons
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.button {
+  @include flex(row, center, center);
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+
+  @include focus-visible;
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+  }
+
+  //Variants
+  &--primary {
+    background-color: $color-primary;
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-hover;
+    }
+  }
+
+  &--secondary {
+    background-color: $color-surface;
+    color: $color-text;
+    border-color: $color-border;
+
+    &:hover:not(:disabled) {
+      background-color: $color-background;
+    }
+  }
+
+  &--danger {
+    background-color: $color-danger;
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      background-color: $color-danger-hover;
+    }
+  }
+
+  &--danger-outline {
+    background-color: $color-surface;
+    color: $color-danger;
+    border-color: $color-danger;
+
+    &:hover:not(:disabled) {
+      background-color: $color-rejected-bg;
+    }
+  }
+}
