@@ -1,79 +1,96 @@
 import React from 'react';
-import { FileText, FilePlus, FileCheck, Globe } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { isAuthor, isManager } from '../../utils/permissions';
+import { FileText, PenTool, ClipboardCheck, Globe } from 'lucide-react';
 import { UserSessionWidget } from '../common/UserSessionWidget';
 import './Sidebar.scss';
 
-export const Sidebar = ({ currentUser, activeSection, onNavigate, onLogout }) => {
-  
+export const Sidebar = ({ inReviewCount = 3 }) => {
+  const { user, logout } = useAuth(); 
+  const navigate = useNavigate();
 
-  const menuStructure = [
-    {
-      id: 'group-redaccion',
-      title: 'REDACCIÓN',
-      requiredRoles: ['author'],
-      items: [
-        { id: 'mis-articulos', label: 'Mis artículos', icon: FileText },
-        { id: 'nuevo-articulo', label: 'Nuevo artículo', icon: FilePlus }
-      ]
-    },
-    {
-      id: 'group-editorial',
-      title: 'EDITORIAL',
-      requiredRoles: ['manager'],
-      items: [
-        { id: 'en-revision', label: 'En revisión', icon: FileCheck, badgeCount: 3 },
-        { id: 'publicados', label: 'Publicados', icon: Globe }
-      ]
-    }
-  ];
-
-  const hasAccess = (requiredRoles) => {
-    if (!currentUser || !currentUser.roles) return false;
-    return requiredRoles.some(role => currentUser.roles.includes(role));
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   return (
-    <aside className="sidebar-navigation" aria-label="Menú lateral de navegación">
-      <div className="sidebar-navigation__brand">
-        <h2 className="sidebar-navigation__brand-title">Mundo Tech</h2>
-        <span className="sidebar-navigation__brand-subtitle">Back-office editorial</span>
+    <aside className="sidebar" aria-label="Menú principal de navegación">
+      <div className="sidebar__brand">
+        <h2 className="brand-title">Mundo Tech</h2>
+        <span className="brand-subtitle">Back-office editorial</span>
       </div>
 
-      <nav className="sidebar-navigation__menu">
-        {menuStructure.map((group) => {
-          if (!hasAccess(group.requiredRoles)) return null;
+      <nav className="sidebar__nav">
+        {isAuthor(user) && (
+          <div className="sidebar__section">
+            <h3 className="sidebar__section-title">REDACCIÓN</h3>
+            <ul className="sidebar__list">
+              <li>
+                <NavLink 
+                  to="/my-articles" 
+                  className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                >
+                  <span className="sidebar__link-icon">
+                    <FileText size={18} strokeWidth={2} />
+                  </span>
+                  <span>Mis artículos</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/new-article" 
+                  className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                >
+                  <span className="sidebar__link-icon">
+                    <PenTool size={18} strokeWidth={2} />
+                  </span>
+                  <span>Nuevo artículo</span>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        )}
 
-          return (
-            <div key={group.id} className="sidebar-navigation__group">
-              <span className="sidebar-navigation__group-title">{group.title}</span>
-              <ul className="sidebar-navigation__list">
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activeSection === item.id;
-
-                  return (
-                    <li key={item.id} className="sidebar-navigation__list-item">
-                      <button
-                        className={`sidebar-navigation__button ${isActive ? 'sidebar-navigation__button--active' : ''}`}
-                        onClick={() => onNavigate(item.id)}
-                      >
-                        <Icon className="sidebar-navigation__button-icon" size={18} strokeWidth={2} />
-                        <span className="sidebar-navigation__button-label">{item.label}</span>
-                        {item.badgeCount !== undefined && (
-                          <span className="sidebar-navigation__button-badge">{item.badgeCount}</span>
-                        )}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          );
-        })}
+        {isManager(user) && (
+          <div className="sidebar__section">
+            <h3 className="sidebar__section-title">EDITORIAL</h3>
+            <ul className="sidebar__list">
+              <li>
+                <NavLink 
+                  to="/in-review" 
+                  className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                >
+                  <span className="sidebar__link-icon">
+                    <ClipboardCheck size={18} strokeWidth={2} />
+                  </span>
+                  <span>En revisión</span>
+                  {inReviewCount > 0 && (
+                    <span className="badge-count" aria-label={`${inReviewCount} artículos en revisión`}>
+                      {inReviewCount}
+                    </span>
+                  )}
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/published" 
+                  className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                >
+                  <span className="sidebar__link-icon">
+                    <Globe size={18} strokeWidth={2} />
+                  </span>
+                  <span>Publicados</span>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        )}
       </nav>
 
-      <div className="sidebar-navigation__footer">
-        <UserSessionWidget user={currentUser} onLogout={onLogout} />
+      <div className="sidebar__footer">
+        <UserSessionWidget user={user} onLogout={handleLogout} />
       </div>
     </aside>
   );
