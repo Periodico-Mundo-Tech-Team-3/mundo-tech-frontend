@@ -20,4 +20,18 @@ export const MOCK_USERS = [
         password: '12345678',
         roles: ['author', 'manager'],
     },
+    {
+        id: 4,
+        name: 'Diego Salas',
+        email: 'diego@mundotech.com',
+        password: '12345678',
+        roles: ['author'],
+    },
+    {
+        id: 5,
+        name: 'Ana Coll',
+        email: 'ana@mundotech.com',
+        password: '12345678',
+        roles: ['author'],
+    },
 ];
