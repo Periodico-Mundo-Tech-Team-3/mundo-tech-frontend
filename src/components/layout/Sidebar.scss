@@ -1,1 +1,114 @@
 //Sidebar
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.sidebar-navigation {
+  @include flex(column, space-between, stretch);
+  width: $sidebar-width;
+  height: 100vh;
+  background-color: $color-sidebar-bg;
+  color: $color-sidebar-text;
+  box-shrink: 0;
+
+  &__brand {
+    padding: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+
+  &__brand-title {
+    color: #ffffff;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  &__brand-subtitle {
+    font-size: 11px;
+    color: $color-sidebar-text-muted;
+    display: block;
+    margin-top: 2px;
+  }
+
+  &__menu {
+    flex: 1;
+    padding: 24px 16px;
+    overflow-y: auto;
+  }
+
+  &__group {
+    margin-bottom: 24px;
+  }
+
+  &__group-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: $color-sidebar-text-muted;
+    display: block;
+    margin-bottom: 8px;
+    padding-left: 10px;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__list-item {
+    margin-bottom: 4px;
+  }
+
+  &__button {
+    @include flex(row, flex-start, center);
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 10px 12px;
+    color: $color-sidebar-text;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s ease;
+    gap: 12px;
+
+    @include focus-visible;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+    }
+
+    &--active {
+      background-color: $color-sidebar-active-bg;
+      font-weight: 500;
+      color: #ffffff;
+    }
+
+    &-icon {
+      flex-shrink: 0;
+      opacity: 0.85;
+    }
+
+    &-label {
+      flex: 1;
+      text-align: left;
+    }
+
+    &-badge {
+      background-color: $color-primary;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      line-height: 1;
+    }
+  }
+
+  &__footer {
+    padding: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+  }
+}
