@@ -1,1 +1,53 @@
-//Icon Button
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.icon-button {
+  @include flex(row, center, center);
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  background-color: $color-surface;
+  color: $color-text-muted;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  @include focus-visible;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+  }
+
+  //Variants
+  &--neutral {
+    &:hover:not(:disabled) {
+      background-color: $color-background;
+      color: $color-text;
+      border-color: $color-text-muted;
+    }
+  }
+
+  &--primary {
+    color: $color-primary;
+
+    &:hover:not(:disabled) {
+      background-color: $color-published-bg;
+      border-color: $color-primary;
+    }
+  }
+
+  &--danger {
+    color: $color-danger;
+
+    &:hover:not(:disabled) {
+      background-color: $color-rejected-bg;
+      border-color: $color-danger;
+    }
+  }
+}
