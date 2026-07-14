@@ -21,7 +21,7 @@ export const Topbar = () => {
       case '/in-review':
         return '';
       case '/published':
-        return 'Publicados';
+        return '';
       case '/preview':
         return 'Vista previa del borrador';
       default:

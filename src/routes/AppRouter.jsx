@@ -7,6 +7,7 @@ import MyArticles from '../pages/MyArticles/MyArticles';
 import NewArticleForm from "../pages/NewArticleForm/NewArticleForm.jsx";
 import ArticlesInReview from "../pages/ArticlesInReview/ArticlesInReview.jsx";
 import ArticlePreview from "../pages/ArticlePreview/ArticlePreview.jsx";
+import ArticlesPublished from "../pages/ArticlesPublished/ArticlesPublished.jsx";
 
 const NewArticleFormWrapper = () => {
   const location = useLocation();
@@ -100,7 +101,7 @@ export const AppRouter = () => {
                 <Route path="/new-article" element={<NewArticleFormWrapper />} />
                 <Route path="/in-review" element={<ArticlesInReview />} />
                 <Route path="/preview" element={<ArticlePreview />} />
-                <Route path="/published" element={<DemoSection title="Publicados" />} />
+                <Route path="/published" element={<ArticlesPublished />} />
                 
                 {/* Redirección por defecto si entran a una ruta inexistente */}
                 <Route path="*" element={<Navigate to="/my-articles" replace />} />
