@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/common/Input.jsx';
 import Textarea from '../../components/common/Textarea.jsx';
 import Button from '../../components/common/Button.jsx';
 import ImageUploader from '../../components/article/ImageUploader';
 import Card from '../../components/common/Card';
+import Modal from '../../components/common/Modal';
+import { saveDraft } from '../../services/articleService';
 import './NewArticleForm.scss';
 
 const MAX_TITLE = 100;
@@ -14,10 +17,14 @@ const NewArticleForm = ({ initialValues, onSubmit, onCancel }) => {
     const { currentUser } = useAuth();
     const isEditing = Boolean(initialValues);
 
+    const navigate = useNavigate();
     const [title, setTitle] = useState(initialValues?.title || '');
     const [content, setContent] = useState(initialValues?.content || '');
     const [image, setImage] = useState(initialValues?.image || null);
     const [errors, setErrors] = useState({});
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [savedArticle, setSavedArticle] = useState(null);
+    const [saving, setSaving] = useState(false);
 
     const validate = () => {
         const nextErrors = {};
@@ -38,18 +45,30 @@ const NewArticleForm = ({ initialValues, onSubmit, onCancel }) => {
         return Object.keys(nextErrors).length === 0;
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (!validate()) return;
 
-        onSubmit?.({
-            title: title.trim(),
-            content: content.trim(),
-            image,
-        });
+        setSaving(true);
+        try {
+            const article = await saveDraft({
+                id: initialValues?.id,
+                title: title.trim(),
+                content: content.trim(),
+                image,
+                author: currentUser ?? { id: null, name: '—' },
+            });
+            setSavedArticle(article);
+            setShowSuccessModal(true);
+        } catch {
+            setErrors({ submit: 'Error al guardar el artículo. Inténtalo de nuevo.' });
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (
+        <>
         <Card className="new-article-form">
             <h2 className="new-article-form__heading">
                 {isEditing ? 'Editar artículo' : 'Redactar artículo'}
@@ -95,12 +114,39 @@ const NewArticleForm = ({ initialValues, onSubmit, onCancel }) => {
                     <Button variant="secondary" onClick={onCancel}>
                         Cancelar
                     </Button>
-                    <Button variant="primary" type="submit">
-                        {isEditing ? 'Guardar cambios' : 'Guardar borrador'}
+                    <Button variant="primary" type="submit" disabled={saving}>
+                        {saving ? 'Guardando…' : isEditing ? 'Guardar cambios' : 'Guardar borrador'}
                     </Button>
                 </div>
             </form>
         </Card>
+
+        <Modal
+          isOpen={showSuccessModal}
+          onClose={() => setShowSuccessModal(false)}
+          title="¡Artículo guardado!"
+        >
+          <p className="success-dialog__message">
+            Tu borrador se ha guardado correctamente.
+          </p>
+          <div className="success-dialog__actions">
+            <Button
+              variant="primary"
+              onClick={() =>
+                navigate('/preview', { state: { article: savedArticle } })
+              }
+            >
+              Ver vista previa
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowSuccessModal(false)}
+            >
+              Cerrar
+            </Button>
+          </div>
+        </Modal>
+        </>
     );
 };
 

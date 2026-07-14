@@ -52,3 +52,21 @@
     margin-top: 1.75rem;
   }
 }
+
+.success-dialog {
+  &__message {
+    margin: 0 0 1.25rem;
+    font-size: 0.9375rem;
+    color: $color-text;
+    line-height: 1.5;
+
+    html.dark & {
+      color: $color-text-dark;
+    }
+  }
+
+  &__actions {
+    @include flex(row, flex-end, center);
+    gap: 0.75rem;
+  }
+}

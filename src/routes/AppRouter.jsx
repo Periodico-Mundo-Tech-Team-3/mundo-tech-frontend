@@ -1,11 +1,17 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { MainLayout } from '../layouts/MainLayout';
 import { Login } from '../pages/Login/Login';
 import MyArticles from '../pages/MyArticles/MyArticles';
 import NewArticleForm from "../pages/NewArticleForm/NewArticleForm.jsx";
 import ArticlesInReview from "../pages/ArticlesInReview/ArticlesInReview.jsx";
+import ArticlePreview from "../pages/ArticlePreview/ArticlePreview.jsx";
+
+const NewArticleFormWrapper = () => {
+  const location = useLocation();
+  return <NewArticleForm initialValues={location.state?.article} />;
+};
 
 export const AppRouter = () => {
   const { currentUser, isAuthenticated, debugSetUser } = useAuth();
@@ -91,8 +97,9 @@ export const AppRouter = () => {
                   ¡Esto te permite probar la navegación interactiva de la Sidebar sin crear un solo archivo extra!
                 */}
                 <Route path="/my-articles" element={<MyArticles />} />
-                <Route path="/new-article" element={<NewArticleForm />} />
+                <Route path="/new-article" element={<NewArticleFormWrapper />} />
                 <Route path="/in-review" element={<ArticlesInReview />} />
+                <Route path="/preview" element={<ArticlePreview />} />
                 <Route path="/published" element={<DemoSection title="Publicados" />} />
                 
                 {/* Redirección por defecto si entran a una ruta inexistente */}
