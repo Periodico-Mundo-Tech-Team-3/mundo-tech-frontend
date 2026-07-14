@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { MainLayout } from '../layouts/MainLayout';
+import MyArticles from "../pages/MyArticles/MyArticles.jsx";
 
 export const AppRouter = () => {
   const { user, debugSetUser } = useAuth();
