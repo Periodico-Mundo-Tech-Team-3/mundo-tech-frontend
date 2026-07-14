@@ -26,40 +26,40 @@
 
   //Variants
   &--primary {
-    background-color: $color-primary;
+    background-color: var(--color-primary);
     color: #ffffff;
 
     &:hover:not(:disabled) {
-      background-color: $color-primary-hover;
+      background-color: var(--color-primary-hover);
     }
   }
 
   &--secondary {
-    background-color: $color-surface;
-    color: $color-text;
-    border-color: $color-border;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border);
 
     &:hover:not(:disabled) {
-      background-color: $color-background;
+      background-color: var(--color-background);
     }
   }
 
   &--danger {
-    background-color: $color-danger;
+    background-color: var(--color-danger);
     color: #ffffff;
 
     &:hover:not(:disabled) {
-      background-color: $color-danger-hover;
+      background-color: var(--color-danger-hover);
     }
   }
 
   &--danger-outline {
-    background-color: $color-surface;
-    color: $color-danger;
-    border-color: $color-danger;
+    background-color: var(--color-surface);
+    color: var(--color-danger);
+    border-color: var(--color-danger);
 
     &:hover:not(:disabled) {
-      background-color: $color-rejected-bg;
+      background-color: var(--color-rejected-bg);
     }
   }
 }

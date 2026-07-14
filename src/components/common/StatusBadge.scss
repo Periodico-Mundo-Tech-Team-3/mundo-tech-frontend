@@ -11,17 +11,17 @@
   white-space: nowrap;
 
   &--draft {
-    background-color: $color-draft-bg;
-    color: $color-draft-text;
+    background-color: var(--color-draft-bg);
+    color: var(--color-draft-text);
   }
 
   &--review {
-    background-color: $color-review-bg;
-    color: $color-review-text;
+    background-color: var(--color-review-bg);
+    color: var(--color-review-text);
   }
 
   &--published {
-    background-color: $color-published-bg;
-    color: $color-published-text;
+    background-color: var(--color-published-bg);
+    color: var(--color-published-text);
   }
 }
