@@ -6,7 +6,7 @@ import { canPublish, canReject } from '../../utils/permissions';
 import { formatDate } from '../../utils/formatDate';
 import { API_URL } from '../../services/api';
 import placeholderArticle from '../../assets/placeholder-article.png';
-import './ReviewArticleCard.scss';
+import './ArticleReviewCard.scss';
 
 const EXCERPT_LENGTH = 180;
 

@@ -19,7 +19,7 @@ export const Topbar = () => {
       case '/new-article':
         return '';
       case '/in-review':
-        return 'En revisión';
+        return '';
       case '/published':
         return 'Publicados';
       case '/preview':

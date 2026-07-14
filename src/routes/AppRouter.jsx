@@ -5,6 +5,7 @@ import { MainLayout } from '../layouts/MainLayout';
 import { Login } from '../pages/Login/Login';
 import MyArticles from '../pages/MyArticles/MyArticles';
 import NewArticleForm from "../pages/NewArticleForm/NewArticleForm.jsx";
+import ArticlesInReview from "../pages/ArticlesInReview/ArticlesInReview.jsx";
 
 export const AppRouter = () => {
   const { currentUser, isAuthenticated, debugSetUser } = useAuth();
@@ -91,7 +92,7 @@ export const AppRouter = () => {
                 */}
                 <Route path="/my-articles" element={<MyArticles />} />
                 <Route path="/new-article" element={<NewArticleForm />} />
-                <Route path="/in-review" element={<DemoSection title="En revisión" />} />
+                <Route path="/in-review" element={<ArticlesInReview />} />
                 <Route path="/published" element={<DemoSection title="Publicados" />} />
                 
                 {/* Redirección por defecto si entran a una ruta inexistente */}
