@@ -15,7 +15,7 @@ export const Topbar = () => {
   const getPageTitle = () => {
     switch (location.pathname) {
       case '/my-articles':
-        return 'Mis artículos';
+        return '';
       case '/new-article':
         return 'Nuevo artículo';
       case '/in-review':

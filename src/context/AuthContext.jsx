@@ -3,7 +3,8 @@ import { MOCK_USERS } from '../mocks/users';
 
 const STORAGE_KEY = 'mundotech_user';
 
-const AuthContext = createContext(null);
+// Exportamos explícitamente AuthContext para blindar importaciones antiguas/directas
+export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
@@ -11,13 +12,8 @@ export const AuthProvider = ({ children }) => {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) return JSON.parse(stored);
       
-      // 💡 AUTOMOCK PARA DESARROLLO:
-      // Si no hay sesión activa, usamos por defecto a Sofía para que veas 
-      // TODAS las opciones del menú simultáneamente (Author y Manager).
-      // Puedes cambiar el índice para probar vistas específicas:
-      // MOCK_USERS[0] -> Marta Ruiz (Manager)
-      // MOCK_USERS[1] -> Carlos Peña (Author)
-      // MOCK_USERS[2] -> Sofía Lambert (Ambos roles)
+      // AUTOMOCK PARA DESARROLLO:
+      // Sofía Lambert (índice 2) carga por defecto con ambos roles para pruebas
       return MOCK_USERS[2]; 
     } catch {
       return null;
@@ -33,15 +29,15 @@ export const AuthProvider = ({ children }) => {
   }, [currentUser]);
 
   const login = (email, password) => {
-    const user = MOCK_USERS.find(
+    const foundUser = MOCK_USERS.find(
       (u) => u.email === email && u.password === password
     );
 
-    if (!user) {
+    if (!foundUser) {
       return { success: false, error: 'Email o contraseña incorrectos' };
     }
 
-    const { password: _omit, ...safeUser } = user;
+    const { password: _omit, ...safeUser } = foundUser;
     setCurrentUser(safeUser);
     return { success: true };
   };
@@ -51,7 +47,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const debugSetUser = (userIndex) => {
-    setCurrentUser(MOCK_USERS[userIndex] || null);
+    const foundUser = MOCK_USERS[userIndex];
+    if (foundUser) {
+      const { password: _omit, ...safeUser } = foundUser;
+      setCurrentUser(safeUser);
+    } else {
+      setCurrentUser(null);
+    }
   };
 
   const value = {
