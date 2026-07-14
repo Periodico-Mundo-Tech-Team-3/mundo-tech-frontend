@@ -1,114 +1,242 @@
-//Sidebar
 @use "../../styles/variables" as *;
 @use "../../styles/mixins" as *;
 
-.sidebar-navigation {
-  @include flex(column, space-between, stretch);
+.sidebar {
+  @include flex($direction: column, $justify: space-between, $align: stretch);
   width: $sidebar-width;
   height: 100vh;
   background-color: $color-sidebar-bg;
   color: $color-sidebar-text;
-  box-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  transition: width 0.2s ease-in-out;
+
+  @include responsive($breakpoint-tablet) {
+    width: 68px;
+    
+    .brand-subtitle,
+    .sidebar__section-title,
+    .sidebar__link span:not(.sidebar__link-icon):not(.badge-count),
+    .user-profile__info {
+      display: none !important;
+    }
+
+    .brand-title {
+      font-size: 13px;
+      text-align: center;
+    }
+  }
 
   &__brand {
     padding: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    @include responsive($breakpoint-tablet) {
+      padding: 16px 4px;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: $color-sidebar-text;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: $color-sidebar-text-muted;
+      display: block;
+      margin-top: 4px;
+    }
   }
 
-  &__brand-title {
-    color: #ffffff;
-    margin: 0;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-
-  &__brand-subtitle {
-    font-size: 11px;
-    color: $color-sidebar-text-muted;
-    display: block;
-    margin-top: 2px;
-  }
-
-  &__menu {
-    flex: 1;
-    padding: 24px 16px;
+  &__nav {
+    flex-grow: 1;
+    padding: 24px 12px;
     overflow-y: auto;
+
+    @include responsive($breakpoint-tablet) {
+      padding: 16px 4px;
+    }
   }
 
-  &__group {
+  &__section {
     margin-bottom: 24px;
-  }
 
-  &__group-title {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    color: $color-sidebar-text-muted;
-    display: block;
-    margin-bottom: 8px;
-    padding-left: 10px;
+    &-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: $color-sidebar-text-muted;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      padding-left: 12px;
+    }
   }
 
   &__list {
     list-style: none;
     padding: 0;
     margin: 0;
+
+    li {
+      margin-bottom: 4px;
+    }
   }
 
-  &__list-item {
-    margin-bottom: 4px;
-  }
-
-  &__button {
-    @include flex(row, flex-start, center);
-    width: 100%;
-    background: none;
-    border: none;
-    padding: 10px 12px;
-    color: $color-sidebar-text;
-    border-radius: $radius-sm;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.15s ease;
+  &__link {
+    @include flex($direction: row, $align: center);
     gap: 12px;
+    padding: 10px 12px;
+    color: $color-sidebar-text-muted;
+    border-radius: $radius-md;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    position: relative;
+    cursor: pointer;
 
-    @include focus-visible;
+    @include responsive($breakpoint-tablet) {
+      justify-content: center;
+      padding: 12px 0;
+    }
+    svg {
+      color: inherit;
+      transition: transform 0.15s ease, color 0.15s ease;
+    }
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.04);
-      color: #ffffff;
+      color: $color-sidebar-text;
+      background-color: $color-sidebar-active-bg;
+
+      svg {
+        transform: scale(1.05);
+      }
     }
 
     &--active {
+      color: $color-sidebar-text;
       background-color: $color-sidebar-active-bg;
-      font-weight: 500;
-      color: #ffffff;
+      font-weight: 600;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 25%;
+        height: 50%;
+        width: 3px;
+        background-color: $color-published-text-dark;
+        border-radius: 0 4px 4px 0;
+
+        @include responsive($breakpoint-tablet) {
+          left: 2px;
+        }
+      }
     }
 
     &-icon {
+      @include flex($align: center, $justify: center);
+      width: 20px;
+      height: 20px;
       flex-shrink: 0;
-      opacity: 0.85;
-    }
-
-    &-label {
-      flex: 1;
-      text-align: left;
-    }
-
-    &-badge {
-      background-color: $color-primary;
-      color: #ffffff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 10px;
-      line-height: 1;
     }
   }
+}
 
-  &__footer {
-    padding: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.03);
+// Badge de conteo de pendientes (para el rol manager)
+.badge-count {
+  background-color: $color-published-text-dark;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin-left: auto;
+  line-height: 1;
+
+  @include responsive($breakpoint-tablet) {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    margin-left: 0;
+  }
+}
+
+// Bloque inferior del usuario
+.sidebar__footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: rgba(0, 0, 0, 0.15);
+  width: 100%;
+}
+
+.user-profile {
+  @include flex($direction: row, $align: center);
+  gap: 10px;
+  overflow: hidden;
+  max-width: calc(#{$sidebar-width} - 60px);
+
+  @include responsive($breakpoint-tablet) {
+    max-width: 100%;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: $color-sidebar-text;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    @include flex($justify: center, $align: center);
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__info {
+    @include flex($direction: column);
+    min-width: 0; // Evita el desborde del texto de nombres largos
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 600;
+    color: $color-sidebar-text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__role {
+    font-size: 11px;
+    color: $color-sidebar-text-muted;
+  }
+}
+
+// Botón de salir (Logout)
+.btn-logout {
+  background: none;
+  border: none;
+  color: $color-sidebar-text-muted;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: $radius-sm;
+  transition: all 0.15s ease;
+  @include flex($justify: center, $align: center);
+
+  &:hover {
+    color: $color-danger; // Un rojo sutil al pasar el mouse por encima
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  svg {
+    transition: transform 0.15s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(2px); // Sutil animación indicando "salida"
   }
 }
