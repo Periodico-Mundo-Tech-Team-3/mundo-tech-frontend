@@ -1,1 +1,27 @@
-// Status Badge
+@use "../../styles/variables" as *;
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+
+  &--draft {
+    background-color: $color-draft-bg;
+    color: $color-draft-text;
+  }
+
+  &--review {
+    background-color: $color-review-bg;
+    color: $color-review-text;
+  }
+
+  &--published {
+    background-color: $color-published-bg;
+    color: $color-published-text;
+  }
+}

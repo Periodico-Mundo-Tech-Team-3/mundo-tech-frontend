@@ -1,1 +1,43 @@
-//Tabs
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.tabs {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 1px solid $color-border;
+  overflow-x: auto;
+}
+
+.tabs__tab {
+  position: relative;
+  padding: 0.75rem 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: $color-text-muted;
+  transition: color 0.15s ease;
+
+  @include focus-visible;
+
+  &:hover {
+    color: $color-text;
+  }
+
+  &--active {
+    color: $color-primary;
+    font-weight: 600;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background-color: $color-primary;
+    }
+  }
+}

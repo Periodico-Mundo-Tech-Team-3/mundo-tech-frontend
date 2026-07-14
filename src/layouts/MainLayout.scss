@@ -1,1 +1,34 @@
-//Main Layout
+@use "../styles/variables" as *;
+@use "../styles/mixins" as *; 
+
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+
+  &__wrapper {
+    flex-grow: 1;
+    margin-left: $sidebar-width;
+    flex-direction: column;
+    min-width: 0;
+    transition: margin-left 0.15s ease;
+
+    @include responsive($breakpoint-tablet) {
+      margin-left: 68px;
+    }
+  }
+
+  &__content {
+    flex-grow: 1;
+    padding: 32px;
+    background-color: $color-background;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    html.dark & {
+      background-color: $color-background-dark;
+    }
+
+    @include responsive($breakpoint-tablet) {
+      padding: 16px;
+    }
+  }
+}

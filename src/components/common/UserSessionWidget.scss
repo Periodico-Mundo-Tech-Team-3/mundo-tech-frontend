@@ -1,0 +1,64 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.user-profile-card {
+  @include flex(row, flex-start, center);
+  padding: 12px 4px;
+  gap: 12px;
+  width: 100%;
+
+  &__avatar {
+    @include flex(row, center, center);
+    width: 40px;
+    height: 40px;
+    background-color: $color-sidebar-active-bg; 
+    color: $color-sidebar-text; 
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0; 
+  }
+
+  &__details {
+    @include flex(column, center, flex-start);
+    flex: 1;
+    min-width: 0; 
+  }
+
+  &__name {
+    color: $color-sidebar-text; 
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  &__role {
+    color: $color-sidebar-text-muted; 
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  &__logout-button {
+    background: none;
+    border: none;
+    color: $color-sidebar-text-muted;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: $radius-sm;
+    @include flex(row, center, center);
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+
+    @include focus-visible;
+
+    &:hover {
+      color: $color-sidebar-text;
+    }
+  }
+}
