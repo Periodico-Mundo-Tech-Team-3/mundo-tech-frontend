@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { MainLayout } from '../layouts/MainLayout';
 import { Login } from '../pages/Login/Login';
 import MyArticles from '../pages/MyArticles/MyArticles';
+import NewArticleForm from "../pages/NewArticleForm/NewArticleForm.jsx";
 
 export const AppRouter = () => {
   const { currentUser, isAuthenticated, debugSetUser } = useAuth();
