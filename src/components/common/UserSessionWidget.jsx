@@ -5,12 +5,11 @@ import './UserSessionWidget.scss';
 export const UserSessionWidget = ({ user, onLogout }) => {
   if (!user) return null;
 
-  // DRY: Extracción de las iniciales para el avatar en mayúsculas
+  //Extracción de las iniciales para el avatar en mayúsculas
   const userInitials = user.name
     ? user.name.split(' ').map((word) => word[0]).join('').toUpperCase()
     : 'U';
 
-  // Capitalizamos y formateamos los roles para que luzcan limpios (ej: "Author / Manager")
   const formattedRoles = user.roles 
     ? user.roles.map(role => role.charAt(0).toUpperCase() + role.slice(1)).join(' / ') 
     : 'Sin rol';

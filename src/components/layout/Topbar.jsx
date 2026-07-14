@@ -7,7 +7,7 @@ import { Sun, Moon } from 'lucide-react';
 import './Topbar.scss';
 
 export const Topbar = () => {
-  const { user } = useAuth(); 
+  const { currentUser } = useAuth(); 
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const location = useLocation(); 
@@ -57,7 +57,7 @@ export const Topbar = () => {
         </div>
 
         {/* Botón de "Nuevo artículo" visible solo para Autores */}
-        {isAuthor(user) && (
+        {isAuthor(currentUser) && (
           <button 
             className="btn-new-article" 
             onClick={() => navigate('/new-article')}
