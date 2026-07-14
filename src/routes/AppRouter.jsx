@@ -4,7 +4,7 @@ import { MainLayout } from '../layouts/MainLayout';
 import MyArticles from "../pages/MyArticles/MyArticles.jsx";
 
 export const AppRouter = () => {
-  const { user, debugSetUser } = useAuth();
+  const { currentUser, debugSetUser } = useAuth();
 
   const developerToolbarStyle = {
     marginTop: '32px',
@@ -56,7 +56,7 @@ export const AppRouter = () => {
           </div>
 
           <div style={{ marginTop: '16px', fontSize: '12px' }}>
-            Usuario actual en sesión: <strong>{user ? `${user.name} (${user.roles.join(', ')})` : 'Ninguno (Sesión vacía)'}</strong>
+            Usuario actual en sesión: <strong>{currentUser ? `${currentUser.name} (${currentUser.roles.join(', ')})` : 'Ninguno (Sesión vacía)'}</strong>
           </div>
         </div>
       </div>
