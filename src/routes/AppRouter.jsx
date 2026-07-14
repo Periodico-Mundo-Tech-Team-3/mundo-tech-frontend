@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { MainLayout } from '../layouts/MainLayout';
 import MyArticles from "../pages/MyArticles/MyArticles.jsx";
+import NewArticleForm from "../pages/NewArticleForm/NewArticleForm.jsx";
 
 export const AppRouter = () => {
   const { currentUser, debugSetUser } = useAuth();
@@ -60,6 +61,7 @@ export const AppRouter = () => {
           </div>
         </div>
       </div>
+
     </MainLayout>
   );
 };
