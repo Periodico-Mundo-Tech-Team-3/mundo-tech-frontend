@@ -1,5 +1,5 @@
 import { useId } from "react";
-import 'Textarea.scss';
+import './Textarea.scss';
 
 const Textarea = ({
     label,
