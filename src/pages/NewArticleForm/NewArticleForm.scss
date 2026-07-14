@@ -9,7 +9,7 @@
     margin: 0 0 1.5rem;
     font-size: 1.25rem;
     font-weight: 700;
-    color: $color-text;
+    color: var(--color-text);
   }
 
   &__fields {
@@ -38,12 +38,12 @@
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
   }
 
   &__meta-value {
     font-size: 0.9375rem;
-    color: $color-text;
+    color: var(--color-text);
   }
 
   &__actions {

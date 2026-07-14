@@ -13,14 +13,14 @@
 
   &__meta {
     font-size: 0.8125rem;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
   }
 
   &__title {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 700;
-    color: $color-text;
+    color: var(--color-text);
   }
 
   &__body {
@@ -38,7 +38,7 @@
     flex-shrink: 0;
     object-fit: cover;
     border-radius: $radius-md;
-    background-color: $color-surface-subtle;
+    background-color: var(--color-surface-subtle);
 
     @include responsive($breakpoint-tablet) {
       width: 100%;
@@ -50,7 +50,7 @@
     margin: 0;
     font-size: 0.9375rem;
     line-height: 1.6;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
   }
 
   &__actions {

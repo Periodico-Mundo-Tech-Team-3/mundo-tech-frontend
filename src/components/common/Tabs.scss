@@ -4,7 +4,7 @@
 .tabs {
   display: flex;
   gap: 1.5rem;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
   overflow-x: auto;
 }
 
@@ -17,17 +17,17 @@
   font-size: 0.9375rem;
   font-weight: 500;
   white-space: nowrap;
-  color: $color-text-muted;
+  color: var(--color-text-muted);
   transition: color 0.15s ease;
 
   @include focus-visible;
 
   &:hover {
-    color: $color-text;
+    color: var(--color-text);
   }
 
   &--active {
-    color: $color-primary;
+    color: var(--color-primary);
     font-weight: 600;
 
     &::after {
@@ -37,7 +37,7 @@
       right: 0;
       bottom: -1px;
       height: 2px;
-      background-color: $color-primary;
+      background-color: var(--color-primary);
     }
   }
 }
