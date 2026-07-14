@@ -6,39 +6,39 @@ import { canPublish, canReject } from '../../utils/permissions';
 import { formatDate } from '../../utils/formatDate';
 import { API_URL } from '../../services/api';
 import placeholderArticle from '../../assets/placeholder-article.png';
-import './ArticleReviewCard.scss';
+import './ArticleCard.scss';
 
 const EXCERPT_LENGTH = 180;
 
 const getExcerpt = (text = '') =>
     text.length > EXCERPT_LENGTH ? `${text.slice(0, EXCERPT_LENGTH).trimEnd()}…` : text;
 
-const ReviewArticleCard = ({ article, currentUser, onPublish, onReject, onViewFull }) => {
+const ArticleCard = ({ article, currentUser, onPublish, onReject, onViewFull }) => {
     const imageSrc = article.image
         ? `${API_URL}/uploads/${article.image}`
         : placeholderArticle;
 
     return (
-        <Card as="article" className="review-card">
-            <div className="review-card__header">
+        <Card as="article" className="article-card">
+            <div className="article-card__header">
                 <StatusBadge status={article.status} />
-                <span className="review-card__meta">
+                <span className="article-card__meta">
           Enviado por {article.author.name} · {formatDate(article.publishDate)}
         </span>
             </div>
 
-            <h3 className="review-card__title">{article.title}</h3>
+            <h3 className="article-card__title">{article.title}</h3>
 
-            <div className="review-card__body">
+            <div className="article-card__body">
                 <img
-                    className="review-card__image"
+                    className="article-card__image"
                     src={imageSrc}
                     alt={article.image ? `Portada de ${article.title}` : ''}
                 />
-                <p className="review-card__excerpt">{getExcerpt(article.content)}</p>
+                <p className="article-card__excerpt">{getExcerpt(article.content)}</p>
             </div>
 
-            <div className="review-card__actions">
+            <div className="article-card__actions">
                 {canPublish(currentUser, article) && (
                     <Button variant="primary" icon={Check} onClick={() => onPublish?.(article)}>
                         Publicar artículo
@@ -57,4 +57,4 @@ const ReviewArticleCard = ({ article, currentUser, onPublish, onReject, onViewFu
     );
 };
 
-export default ReviewArticleCard;
+export default ArticleCard;

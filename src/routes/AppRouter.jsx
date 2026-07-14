@@ -6,6 +6,7 @@ import { Login } from '../pages/Login/Login';
 import MyArticles from '../pages/MyArticles/MyArticles';
 import NewArticleForm from "../pages/NewArticleForm/NewArticleForm.jsx";
 import ArticlesInReview from "../pages/ArticlesInReview/ArticlesInReview.jsx";
+import ArticlesPublished from "../pages/ArticlesPublished/ArticlesPublished.jsx";
 
 export const AppRouter = () => {
   const { currentUser, isAuthenticated, debugSetUser } = useAuth();
@@ -93,7 +94,7 @@ export const AppRouter = () => {
                 <Route path="/my-articles" element={<MyArticles />} />
                 <Route path="/new-article" element={<NewArticleForm />} />
                 <Route path="/in-review" element={<ArticlesInReview />} />
-                <Route path="/published" element={<DemoSection title="Publicados" />} />
+                <Route path="/published" element={<ArticlesPublished />} />
                 
                 {/* Redirección por defecto si entran a una ruta inexistente */}
                 <Route path="*" element={<Navigate to="/my-articles" replace />} />
