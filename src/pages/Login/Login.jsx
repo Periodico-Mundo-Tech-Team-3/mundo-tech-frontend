@@ -20,14 +20,12 @@ export const Login = () => {
     setError('');
     setIsLoading(true);
 
-    // Validación básica de campos vacíos
     if (!email || !password) {
       setError('Por favor, rellene todos los campos.');
       setIsLoading(false);
       return;
     }
 
-    // Intentar inicio de sesión con el mock del AuthContext
     const response = login(email, password);
 
     if (response.success) {
@@ -40,14 +38,12 @@ export const Login = () => {
 
   return (
     <div className="login-page">
-      {/* Reutilizamos el Card indicándole que se comporte semánticamente como un form */}
       <Card as="form" onSubmit={handleSubmit} className="login-card">
         <div className="login-card__header">
           <h1 className="login-card__title">Mundo Tech</h1>
           <p className="login-card__subtitle">Back-office editorial</p>
         </div>
 
-        {/* Mensaje de Error de Validación */}
         {error && (
           <div className="login-card__error-alert" role="alert">
             {error}
@@ -86,7 +82,6 @@ export const Login = () => {
           </a>
         </div>
 
-        {/* Reutilizamos tu botón enviándole el icono de inicio de sesión de Lucide */}
         <Button
           type="submit"
           variant="primary"

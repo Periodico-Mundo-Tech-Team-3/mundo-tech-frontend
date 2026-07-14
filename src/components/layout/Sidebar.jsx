@@ -7,7 +7,7 @@ import { UserSessionWidget } from '../common/UserSessionWidget';
 import './Sidebar.scss';
 
 export const Sidebar = ({ inReviewCount = 3 }) => {
-  const { user, logout } = useAuth(); 
+  const { currentUser, logout } = useAuth(); 
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,7 +23,7 @@ export const Sidebar = ({ inReviewCount = 3 }) => {
       </div>
 
       <nav className="sidebar__nav">
-        {isAuthor(user) && (
+        {isAuthor(currentUser) && (
           <div className="sidebar__section">
             <h3 className="sidebar__section-title">REDACCIÓN</h3>
             <ul className="sidebar__list">
@@ -53,7 +53,7 @@ export const Sidebar = ({ inReviewCount = 3 }) => {
           </div>
         )}
 
-        {isManager(user) && (
+        {isManager(currentUser) && (
           <div className="sidebar__section">
             <h3 className="sidebar__section-title">EDITORIAL</h3>
             <ul className="sidebar__list">
@@ -90,7 +90,7 @@ export const Sidebar = ({ inReviewCount = 3 }) => {
       </nav>
 
       <div className="sidebar__footer">
-        <UserSessionWidget user={user} onLogout={handleLogout} />
+        <UserSessionWidget user={currentUser} onLogout={handleLogout} />
       </div>
     </aside>
   );
