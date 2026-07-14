@@ -90,7 +90,7 @@ export const AppRouter = () => {
                   ¡Esto te permite probar la navegación interactiva de la Sidebar sin crear un solo archivo extra!
                 */}
                 <Route path="/my-articles" element={<MyArticles />} />
-                <Route path="/new-article" element={<DemoSection title="Nuevo artículo" />} />
+                <Route path="/new-article" element={<NewArticleForm />} />
                 <Route path="/in-review" element={<DemoSection title="En revisión" />} />
                 <Route path="/published" element={<DemoSection title="Publicados" />} />
                 
