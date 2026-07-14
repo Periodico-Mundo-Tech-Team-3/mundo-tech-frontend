@@ -1,7 +1,7 @@
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-.review-card {
+.article-card {
   @include flex(column);
   gap: 1rem;
 

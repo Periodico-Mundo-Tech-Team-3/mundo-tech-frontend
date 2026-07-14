@@ -3,24 +3,22 @@ import { useAuth } from '../../context/AuthContext';
 import { MOCK_ARTICLES } from '../../mocks/articles';
 import { isManager } from '../../utils/permissions';
 import ArticleCard from '../../components/article/ArticleCard.jsx';
-import './ArticlesInReview.scss';
+import './ArticlesPublished.scss';
 
-const ArticlesInReview = () => {
+const ArticlesPublished = () => {
     const { currentUser } = useAuth();
 
-    const articlesInReview = useMemo(
-        () => MOCK_ARTICLES.filter((article) => article.status === 'IN_REVIEW'),
+    const publishedArticles = useMemo(
+        () => MOCK_ARTICLES.filter((article) => article.status === 'PUBLISHED'),
         []
     );
 
-    const handlePublish = (article) => console.log('Publicar', article.id);
-    const handleReject = (article) => console.log('Rechazar', article.id);
     const handleViewFull = (article) => console.log('Ver completo', article.id);
 
     if (!isManager(currentUser)) {
         return (
-            <div className="articles-in-review">
-                <p className="articles-in-review__empty">
+            <div className="articles-published">
+                <p className="articles-published__empty">
                     Esta sección está disponible solo para responsables editoriales.
                 </p>
             </div>
@@ -28,22 +26,20 @@ const ArticlesInReview = () => {
     }
 
     return (
-        <div className="articles-in-review">
-            <h1 className="articles-in-review__title">En revisión</h1>
+        <div className="articles-published">
+            <h1 className="articles-published__title">Publicados</h1>
 
-            {articlesInReview.length === 0 ? (
-                <p className="articles-in-review__empty">
-                    No hay artículos pendientes de revisión.
+            {publishedArticles.length === 0 ? (
+                <p className="articles-published__empty">
+                    Todavía no hay artículos publicados.
                 </p>
             ) : (
-                <div className="articles-in-review__list">
-                    {articlesInReview.map((article) => (
+                <div className="articles-published__list">
+                    {publishedArticles.map((article) => (
                         <ArticleCard
                             key={article.id}
                             article={article}
                             currentUser={currentUser}
-                            onPublish={handlePublish}
-                            onReject={handleReject}
                             onViewFull={handleViewFull}
                         />
                     ))}
@@ -53,4 +49,4 @@ const ArticlesInReview = () => {
     );
 };
 
-export default ArticlesInReview;
+export default ArticlesPublished;
