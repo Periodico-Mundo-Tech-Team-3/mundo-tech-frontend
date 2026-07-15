@@ -51,7 +51,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         <div className="modal__body">{children}</div>
       </div>
     </div>,
-    document.body
+    document.getElementById('modal-root') || document.body
   );
 };
 

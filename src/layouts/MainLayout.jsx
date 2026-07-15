@@ -11,6 +11,7 @@ export const MainLayout = ({ children }) => {
         <Topbar />
         <main className="main-layout__content" role="main">
           {children}
+          <div id="modal-root" />
         </main>
       </div>
     </div>
