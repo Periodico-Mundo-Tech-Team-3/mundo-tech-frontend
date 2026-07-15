@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { getArticlesByStatus } from '../../services/articleService';
+import { getArticlesByStatus, publishArticle, rejectArticle, } from '../../services/articleService';
 import { isManager } from '../../utils/permissions';
 import ArticleCard from '../../components/article/ArticleCard';
 import './ArticlesInReview.scss';
@@ -11,32 +11,47 @@ const ArticlesInReview = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
+    const loadArticles = useCallback(async () => {
         if (!currentUser) return;
 
-        const loadArticles = async () => {
-            setLoading(true);
-            try {
-                const data = await getArticlesByStatus('IN_REVIEW', currentUser.id);
-                setArticles(data);
-                setError('');
-            } catch (err) {
-                console.error(err);
-                setError('No se pudieron cargar los artículos.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadArticles();
+        setLoading(true);
+        try {
+            const data = await getArticlesByStatus('IN_REVIEW', currentUser.id);
+            setArticles(data);
+            setError('');
+        } catch (err) {
+            console.error(err);
+            setError('No se pudieron cargar los artículos.');
+        } finally {
+            setLoading(false);
+        }
     }, [currentUser]);
 
-    const handlePublish = (article) =>
-        console.log('Publicar', article.id);
-    const handleReject = (article) =>
-        console.log('Rechazar', article.id);
-    const handleViewFull = (article) =>
-        console.log('Ver completo', article.id);
+    useEffect(() => {
+        loadArticles();
+    }, [loadArticles]);
+
+    const handlePublish = async (article) => {
+        try {
+            await publishArticle(article.id, currentUser.id);
+            await loadArticles();
+        } catch (err) {
+            console.error(err);
+            setError('No se pudo publicar el artículo.');
+        }
+    };
+
+    const handleReject = async (article) => {
+        try {
+            await rejectArticle(article.id, currentUser.id);
+            await loadArticles();
+        } catch (err) {
+            console.error(err);
+            setError('No se pudo rechazar el artículo.');
+        }
+    };
+
+    const handleViewFull = (article) => console.log('Ver completo', article.id);
 
     if (!isManager(currentUser)) {
         return (

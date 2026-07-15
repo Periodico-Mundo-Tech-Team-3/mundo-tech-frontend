@@ -1,6 +1,7 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { getAllArticles } from '../../services/articleService';
+import { getAllArticles, submitArticle, deleteArticle } from '../../services/articleService';
 import { canSeeInMyArticles, isAuthor } from '../../utils/permissions';
 import { formatDate } from '../../utils/formatDate';
 import Tabs from '../../components/common/Tabs';
@@ -18,28 +19,30 @@ const TABS = [
 
 const MyArticles = () => {
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('all');
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        const loadArticles = async () => {
-            setLoading(true);
-            try {
-                const data = await getAllArticles();
-                setArticles(data);
-                setError('');
-            } catch (err) {
-                console.error(err);
-                setError('No se pudieron cargar los artículos.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadArticles();
+    // Extraído del useEffect para poder recargar tras una acción.
+    const loadArticles = useCallback(async () => {
+        setLoading(true);
+        try {
+            const data = await getAllArticles();
+            setArticles(data);
+            setError('');
+        } catch (err) {
+            console.error(err);
+            setError('No se pudieron cargar los artículos.');
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        loadArticles();
+    }, [loadArticles]);
 
     const visibleArticles = useMemo(() => {
         const canSee = articles.filter((article) =>
@@ -57,10 +60,38 @@ const MyArticles = () => {
         );
     }, [articles, currentUser, activeTab]);
 
-    const handleEdit = (article) => console.log('Editar', article.id);
-    const handleSendToReview = (article) => console.log('Enviar a revisión', article.id);
-    const handleView = (article) => console.log('Ver', article.id);
-    const handleDelete = (article) => console.log('Eliminar', article.id);
+    const handleEdit = (article) => {
+        navigate('/new-article', { state: { article } });
+    };
+
+    const handleView = (article) => {
+        navigate('/preview', { state: { article } });
+    };
+
+    const handleSendToReview = async (article) => {
+        try {
+            await submitArticle(article.id, currentUser.id);
+            await loadArticles();
+        } catch (err) {
+            console.error(err);
+            setError('No se pudo enviar el artículo a revisión.');
+        }
+    };
+
+    const handleDelete = async (article) => {
+        const confirmed = window.confirm(
+            `¿Seguro que quieres eliminar "${article.title}"? Esta acción no se puede deshacer.`
+        );
+        if (!confirmed) return;
+
+        try {
+            await deleteArticle(article.id, currentUser.id);
+            await loadArticles();
+        } catch (err) {
+            console.error(err);
+            setError('No se pudo eliminar el artículo.');
+        }
+    };
 
     if (!isAuthor(currentUser)) {
         return (

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/common/Input.jsx';
 import Textarea from '../../components/common/Textarea.jsx';
@@ -16,9 +16,12 @@ const MAX_CONTENT = 10000;
 
 const NewArticleForm = ({ initialValues, onSubmit, onCancel }) => {
     const { currentUser } = useAuth();
-    const isEditing = Boolean(initialValues);
-
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const article = initialValues ?? location.state?.article;
+    const isEditing = Boolean(article);
+
     const [title, setTitle] = useState(initialValues?.title || '');
     const [content, setContent] = useState(initialValues?.content || '');
     const [image, setImage] = useState(initialValues?.image || null);
@@ -61,7 +64,7 @@ const NewArticleForm = ({ initialValues, onSubmit, onCancel }) => {
             const file = image instanceof File ? image : null;
 
             const article = isEditing
-                ? await updateArticle(initialValues.id, currentUser.id, articleData)
+                ? await updateArticle(initialValues.id, currentUser.id, articleData, file)
                 : await createArticle(currentUser.id, articleData, file);
 
             setSavedArticle(article);

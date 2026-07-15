@@ -23,7 +23,7 @@ export const getArticlesByAuthor = async (authorId) => {
   return data;
 };
 
-// POST /articles/{userId} — multipart: parte "article" (JSON) + parte "file"
+// POST /articles/{userId} — multipart
 export const createArticle = async (userId, article, file) => {
   const formData = new FormData();
   formData.append(
@@ -36,8 +36,16 @@ export const createArticle = async (userId, article, file) => {
   return data;
 };
 
-export const updateArticle = async (id, userLoginId, article) => {
-  const { data } = await api.put(`${BASE}/${id}/${userLoginId}`, article);
+// PUT /articles/{id}/{userLoginId}
+export const updateArticle = async (id, userLoginId, article, file) => {
+  const formData = new FormData();
+  formData.append(
+      'article',
+      new Blob([JSON.stringify(article)], { type: 'application/json' })
+  );
+  if (file) formData.append('file', file);
+
+  const { data } = await api.put(`${BASE}/${id}/${userLoginId}`, formData);
   return data;
 };
 
@@ -46,7 +54,7 @@ export const deleteArticle = async (id, userLoginId) => {
   await api.delete(`${BASE}/${id}/${userLoginId}`);
 };
 
-// ── Transiciones de estado (GET con ?userId=) ──
+// ARTICLE STATUS (GET con ?userId=) ──
 export const submitArticle = async (id, userId) => {
   const { data } = await api.get(`${BASE}/${id}/submit`, { params: { userId } });
   return data;
