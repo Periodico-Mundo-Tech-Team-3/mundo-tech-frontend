@@ -1,12 +1,13 @@
-import {useAuth} from "../../context/AuthContext.jsx";
-import {useMemo, useState} from "react";
-import {MOCK_ARTICLES} from "../../mocks/articles.js";
-import {canSeeInMyArticles, isAuthor} from "../../utils/permissions.js";
-import {formatDate} from "../../utils/formatDate.js";
-import Tabs from "../../components/common/Tabs.jsx";
-import Table from '../../components/common/Table.jsx'
-import StatusBadge from "../../components/common/StatusBadge.jsx";
-import ArticleRowActions from "../../components/article/ArticleRowActions.jsx";
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { getAllArticles, submitArticle, deleteArticle } from '../../services/articleService';
+import { canSeeInMyArticles, isAuthor } from '../../utils/permissions';
+import { formatDate } from '../../utils/formatDate';
+import Tabs from '../../components/common/Tabs';
+import Table from '../../components/common/Table';
+import StatusBadge from '../../components/common/StatusBadge';
+import ArticleRowActions from '../../components/article/ArticleRowActions';
 import './MyArticles.scss';
 
 const TABS = [
@@ -18,10 +19,33 @@ const TABS = [
 
 const MyArticles = () => {
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('all');
+    const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    // Extraído del useEffect para poder recargar tras una acción.
+    const loadArticles = useCallback(async () => {
+        setLoading(true);
+        try {
+            const data = await getAllArticles();
+            setArticles(data);
+            setError('');
+        } catch (err) {
+            console.error(err);
+            setError('No se pudieron cargar los artículos.');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        loadArticles();
+    }, [loadArticles]);
 
     const visibleArticles = useMemo(() => {
-        const canSee = MOCK_ARTICLES.filter((article) =>
+        const canSee = articles.filter((article) =>
             canSeeInMyArticles(currentUser, article)
         );
 
@@ -34,21 +58,49 @@ const MyArticles = () => {
                 article.status === activeTab &&
                 article.author.id === currentUser?.id
         );
-    }, [currentUser, activeTab]);
+    }, [articles, currentUser, activeTab]);
 
-    const handleEdit = (article) => console.log('Editar', article.id);
-    const handleSendToReview = (article) => console.log('Enviar a revisión', article.id);
-    const handleView = (article) => console.log('Ver', article.id);
-    const handleDelete = (article) => console.log('Eliminar', article.id);
+    const handleEdit = (article) => {
+        navigate('/new-article', { state: { article } });
+    };
+
+    const handleView = (article) => {
+        navigate('/preview', { state: { article } });
+    };
+
+    const handleSendToReview = async (article) => {
+        try {
+            await submitArticle(article.id, currentUser.id);
+            await loadArticles();
+        } catch (err) {
+            console.error(err);
+            setError('No se pudo enviar el artículo a revisión.');
+        }
+    };
+
+    const handleDelete = async (article) => {
+        const confirmed = window.confirm(
+            `¿Seguro que quieres eliminar "${article.title}"? Esta acción no se puede deshacer.`
+        );
+        if (!confirmed) return;
+
+        try {
+            await deleteArticle(article.id, currentUser.id);
+            await loadArticles();
+        } catch (err) {
+            console.error(err);
+            setError('No se pudo eliminar el artículo.');
+        }
+    };
 
     if (!isAuthor(currentUser)) {
-    return (
-        <div className="my-articles">
-            <p className="my-articles__empty">
-                Esta sección está disponible solo para autores.
-            </p>
-        </div>
-    );
+        return (
+            <div className="my-articles">
+                <p className="my-articles__empty">
+                    Esta sección está disponible solo para autores.
+                </p>
+            </div>
+        );
     }
 
     return (
@@ -62,8 +114,12 @@ const MyArticles = () => {
                 id={`panel-${activeTab}`}
                 aria-labelledby={`tab-${activeTab}`}
                 className="my-articles__panel"
-                >
-                {visibleArticles.length === 0 ? (
+            >
+                {loading ? (
+                    <p className="my-articles__empty">Cargando artículos…</p>
+                ) : error ? (
+                    <p className="my-articles__empty" role="alert">{error}</p>
+                ) : visibleArticles.length === 0 ? (
                     <p className="my-articles__empty">
                         No hay artículos en esta categoría.
                     </p>
