@@ -32,7 +32,28 @@ export const saveDraft = (articleData) => {
 
 export const sendToReview = (articleId) => {
   const article = articlesStore.find((a) => a.id === articleId);
-  if (!article) return Promise.reject(new Error('Artículo no encontrado'));
+  if (!article) {
+    return Promise.reject(new Error('Artículo no encontrado'));
+  }
   article.status = 'IN_REVIEW';
+  return Promise.resolve({ ...article });
+};
+
+export const publishArticle = (articleId) => {
+  const article = articlesStore.find((a) => a.id === articleId);
+  if (!article){
+    return Promise.reject(new Error('Artículo no encontrado'));
+  }
+    
+  article.status = 'PUBLISHED';
+  return Promise.resolve({ ...article });
+};
+
+export const rejectArticle = (articleId) => {
+  const article = articlesStore.find((a) => a.id === articleId);
+  if (!article){
+  return Promise.reject(new Error('Artículo no encontrado'));
+     }
+  article.status = 'DRAFT';
   return Promise.resolve({ ...article });
 };

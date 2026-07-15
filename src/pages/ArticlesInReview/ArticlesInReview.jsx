@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { MOCK_ARTICLES } from '../../mocks/articles';
 import { isManager } from '../../utils/permissions';
@@ -7,6 +8,7 @@ import './ArticlesInReview.scss';
 
 const ArticlesInReview = () => {
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
 
     const articlesInReview = useMemo(
         () => MOCK_ARTICLES.filter((article) => article.status === 'IN_REVIEW'),
@@ -15,7 +17,7 @@ const ArticlesInReview = () => {
 
     const handlePublish = (article) => console.log('Publicar', article.id);
     const handleReject = (article) => console.log('Rechazar', article.id);
-    const handleViewFull = (article) => console.log('Ver completo', article.id);
+    const handleViewFull = (article) => navigate('/review', { state: { article } });
 
     if (!isManager(currentUser)) {
         return (
