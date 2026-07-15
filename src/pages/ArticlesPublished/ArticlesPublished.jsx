@@ -1,21 +1,37 @@
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { MOCK_ARTICLES } from '../../mocks/articles';
+import { getArticlesByStatus } from '../../services/articleService';
 import { isManager } from '../../utils/permissions';
-import ArticleCard from '../../components/article/ArticleCard.jsx';
+import ArticleCard from '../../components/article/ArticleCard';
 import './ArticlesPublished.scss';
 
 const ArticlesPublished = () => {
     const { currentUser } = useAuth();
-    const navigate = useNavigate();
+    const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-    const publishedArticles = useMemo(
-        () => MOCK_ARTICLES.filter((article) => article.status === 'PUBLISHED'),
-        []
-    );
+    useEffect(() => {
+        if (!currentUser) return;
 
-    const handleViewFull = (article) => navigate('/review', { state: { article } });
+        const loadArticles = async () => {
+            setLoading(true);
+            try {
+                const data = await getArticlesByStatus('PUBLISHED', currentUser.id);
+                setArticles(data);
+                setError('');
+            } catch (err) {
+                console.error(err);
+                setError('No se pudieron cargar los artículos.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadArticles();
+    }, [currentUser]);
+
+    const handleViewFull = (article) => console.log('Ver completo', article.id);
 
     if (!isManager(currentUser)) {
         return (
@@ -31,13 +47,17 @@ const ArticlesPublished = () => {
         <div className="articles-published">
             <h1 className="articles-published__title">Publicados</h1>
 
-            {publishedArticles.length === 0 ? (
+            {loading ? (
+                <p className="articles-published__empty">Cargando artículos…</p>
+            ) : error ? (
+                <p className="articles-published__empty" role="alert">{error}</p>
+            ) : articles.length === 0 ? (
                 <p className="articles-published__empty">
                     Todavía no hay artículos publicados.
                 </p>
             ) : (
                 <div className="articles-published__list">
-                    {publishedArticles.map((article) => (
+                    {articles.map((article) => (
                         <ArticleCard
                             key={article.id}
                             article={article}

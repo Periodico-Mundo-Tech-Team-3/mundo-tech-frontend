@@ -1,23 +1,42 @@
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { MOCK_ARTICLES } from '../../mocks/articles';
+import { getArticlesByStatus } from '../../services/articleService';
 import { isManager } from '../../utils/permissions';
-import ArticleCard from '../../components/article/ArticleCard.jsx';
+import ArticleCard from '../../components/article/ArticleCard';
 import './ArticlesInReview.scss';
 
 const ArticlesInReview = () => {
     const { currentUser } = useAuth();
-    const navigate = useNavigate();
+    const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-    const articlesInReview = useMemo(
-        () => MOCK_ARTICLES.filter((article) => article.status === 'IN_REVIEW'),
-        []
-    );
+    useEffect(() => {
+        if (!currentUser) return;
 
-    const handlePublish = (article) => console.log('Publicar', article.id);
-    const handleReject = (article) => console.log('Rechazar', article.id);
-    const handleViewFull = (article) => navigate('/review', { state: { article } });
+        const loadArticles = async () => {
+            setLoading(true);
+            try {
+                const data = await getArticlesByStatus('IN_REVIEW', currentUser.id);
+                setArticles(data);
+                setError('');
+            } catch (err) {
+                console.error(err);
+                setError('No se pudieron cargar los artículos.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadArticles();
+    }, [currentUser]);
+
+    const handlePublish = (article) =>
+        console.log('Publicar', article.id);
+    const handleReject = (article) =>
+        console.log('Rechazar', article.id);
+    const handleViewFull = (article) =>
+        console.log('Ver completo', article.id);
 
     if (!isManager(currentUser)) {
         return (
@@ -33,13 +52,17 @@ const ArticlesInReview = () => {
         <div className="articles-in-review">
             <h1 className="articles-in-review__title">En revisión</h1>
 
-            {articlesInReview.length === 0 ? (
+            {loading ? (
+                <p className="articles-in-review__empty">Cargando artículos…</p>
+            ) : error ? (
+                <p className="articles-in-review__empty" role="alert">{error}</p>
+            ) : articles.length === 0 ? (
                 <p className="articles-in-review__empty">
                     No hay artículos pendientes de revisión.
                 </p>
             ) : (
                 <div className="articles-in-review__list">
-                    {articlesInReview.map((article) => (
+                    {articles.map((article) => (
                         <ArticleCard
                             key={article.id}
                             article={article}
