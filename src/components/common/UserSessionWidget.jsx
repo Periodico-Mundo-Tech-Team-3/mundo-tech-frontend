@@ -10,9 +10,11 @@ export const UserSessionWidget = ({ user, onLogout }) => {
     ? user.name.split(' ').map((word) => word[0]).join('').toUpperCase()
     : 'U';
 
-  const formattedRoles = user.roles 
-    ? user.roles.map(role => role.charAt(0).toUpperCase() + role.slice(1)).join(' / ') 
-    : 'Sin rol';
+  const formattedRoles = user.roles
+      ? user.roles
+          .map(({ name }) => name.charAt(0).toUpperCase() + name.slice(1))
+          .join(' / ')
+      : 'Sin rol';
 
   return (
     <div className="user-profile-card">

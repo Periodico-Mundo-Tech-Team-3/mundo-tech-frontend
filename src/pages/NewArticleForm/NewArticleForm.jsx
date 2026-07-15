@@ -7,7 +7,8 @@ import Button from '../../components/common/Button.jsx';
 import ImageUploader from '../../components/article/ImageUploader';
 import Card from '../../components/common/Card';
 import Modal from '../../components/common/Modal';
-import { saveDraft } from '../../services/articleService';
+import { createArticle, updateArticle } from '../../services/articleService';
+import { formatDate } from '../../utils/formatDate';
 import './NewArticleForm.scss';
 
 const MAX_TITLE = 100;
@@ -51,17 +52,23 @@ const NewArticleForm = ({ initialValues, onSubmit, onCancel }) => {
 
         setSaving(true);
         try {
-            const article = await saveDraft({
-                id: initialValues?.id,
+            const articleData = {
                 title: title.trim(),
                 content: content.trim(),
-                image,
-                author: currentUser ?? { id: null, name: '—' },
-            });
+                publishDate: new Date().toISOString(),
+            };
+
+            const file = image instanceof File ? image : null;
+
+            const article = isEditing
+                ? await updateArticle(initialValues.id, currentUser.id, articleData)
+                : await createArticle(currentUser.id, articleData, file);
+
             setSavedArticle(article);
             setShowSuccessModal(true);
-        } catch {
+        } catch (error) {
             setErrors({ submit: 'Error al guardar el artículo. Inténtalo de nuevo.' });
+            console.error(error);
         } finally {
             setSaving(false);
         }
@@ -69,83 +76,95 @@ const NewArticleForm = ({ initialValues, onSubmit, onCancel }) => {
 
     return (
         <>
-        <Card className="new-article-form">
-            <h2 className="new-article-form__heading">
-                {isEditing ? 'Editar artículo' : 'Redactar artículo'}
-            </h2>
+            <Card className="new-article-form">
+                <h2 className="new-article-form__heading">
+                    {isEditing ? 'Editar artículo' : 'Redactar artículo'}
+                </h2>
 
-            <form onSubmit={handleSubmit} noValidate>
-                <div className="new-article-form__fields">
-                    <Input
-                        label="Título"
-                        placeholder="Escribe el titular del artículo…"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        error={errors.title}
-                        required
-                        maxLength={MAX_TITLE}
-                    />
+                <form onSubmit={handleSubmit} noValidate>
+                    <div className="new-article-form__fields">
+                        <Input
+                            label="Título"
+                            placeholder="Escribe el titular del artículo…"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            error={errors.title}
+                            required
+                            maxLength={MAX_TITLE}
+                        />
 
-                    <ImageUploader value={image} onChange={setImage} />
+                        <ImageUploader value={image} onChange={setImage} />
 
-                    <Textarea
-                        label="Contenido"
-                        placeholder="Escribe el cuerpo del artículo…"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        error={errors.content}
-                        required
-                    />
+                        <Textarea
+                            label="Contenido"
+                            placeholder="Escribe el cuerpo del artículo…"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            error={errors.content}
+                            required
+                        />
 
-                    {/* Fecha y autor: solo lectura. El backend fija la fecha; el autor es el usuario logueado. */}
-                    <div className="new-article-form__meta">
-                        <div className="new-article-form__meta-item">
-                            <span className="new-article-form__meta-label">Fecha de publicación</span>
-                            <span className="new-article-form__meta-value">Se define al publicar</span>
-                        </div>
-                        <div className="new-article-form__meta-item">
-                            <span className="new-article-form__meta-label">Autor</span>
-                            <span className="new-article-form__meta-value">{currentUser?.name || '—'}</span>
+                        <div className="new-article-form__meta">
+                            <div className="new-article-form__meta-item">
+                                <span className="new-article-form__meta-label">Fecha de publicación</span>
+                                <span className="new-article-form__meta-value">
+                                {initialValues?.publishDate
+                                    ? formatDate(initialValues.publishDate)
+                                    : formatDate(new Date().toISOString())}
+                            </span>
+                            </div>
+                            <div className="new-article-form__meta-item">
+                                <span className="new-article-form__meta-label">Autor</span>
+                                <span className="new-article-form__meta-value">{currentUser?.name || '—'}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="new-article-form__actions">
-                    <Button variant="secondary" onClick={onCancel}>
-                        Cancelar
+                    {errors.submit && (
+                        <p className="new-article-form__submit-error" role="alert">
+                            {errors.submit}
+                        </p>
+                    )}
+
+                    <div className="new-article-form__actions">
+                        <Button
+                            variant="secondary"
+                            onClick={onCancel ?? (() => navigate('/my-articles'))}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button variant="primary" type="submit" disabled={saving}>
+                            {saving ? 'Guardando…' : isEditing ? 'Guardar cambios' : 'Guardar borrador'}
+                        </Button>
+                    </div>
+                </form>
+            </Card>
+
+            <Modal
+                isOpen={showSuccessModal}
+                onClose={() => setShowSuccessModal(false)}
+                title="¡Artículo guardado!"
+            >
+                <p className="success-dialog__message">
+                    Tu borrador se ha guardado correctamente.
+                </p>
+                <div className="success-dialog__actions">
+                    <Button
+                        variant="primary"
+                        onClick={() =>
+                            navigate('/preview', { state: { article: savedArticle } })
+                        }
+                    >
+                        Ver vista previa
                     </Button>
-                    <Button variant="primary" type="submit" disabled={saving}>
-                        {saving ? 'Guardando…' : isEditing ? 'Guardar cambios' : 'Guardar borrador'}
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowSuccessModal(false)}
+                    >
+                        Cerrar
                     </Button>
                 </div>
-            </form>
-        </Card>
-
-        <Modal
-          isOpen={showSuccessModal}
-          onClose={() => setShowSuccessModal(false)}
-          title="¡Artículo guardado!"
-        >
-          <p className="success-dialog__message">
-            Tu borrador se ha guardado correctamente.
-          </p>
-          <div className="success-dialog__actions">
-            <Button
-              variant="primary"
-              onClick={() =>
-                navigate('/preview', { state: { article: savedArticle } })
-              }
-            >
-              Ver vista previa
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => setShowSuccessModal(false)}
-            >
-              Cerrar
-            </Button>
-          </div>
-        </Modal>
+            </Modal>
         </>
     );
 };
