@@ -52,20 +52,6 @@
     }
   }
 
-  &__status {
-    position: absolute;
-    inset: 0;
-    @include flex(row, center, center);
-    gap: 0.5rem;
-    background-color: rgba(0, 0, 0, 0.45);
-    color: #fff;
-    font-size: 0.875rem;
-  }
-
-  &__spinner {
-    animation: image-uploader-spin 0.8s linear infinite;
-  }
-
   &__remove {
     position: absolute;
     top: 0.5rem;
@@ -89,11 +75,5 @@
   &__error {
     font-size: 0.8125rem;
     color: var(--color-danger);
-  }
-}
-
-@keyframes image-uploader-spin {
-  to {
-    transform: rotate(360deg);
   }
 }

@@ -2,7 +2,7 @@
 @use '../../styles/mixins' as *;
 
 .modal-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.5);
@@ -20,15 +20,10 @@
   max-width: 440px;
   max-height: calc(100% - 3rem);
   overflow-y: auto;
-  background-color: $color-surface;
+  background-color: var(--color-surface);
   border-radius: $radius-lg;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-card);
   animation: modal-slide-up 0.2s ease;
-
-  html.dark & {
-    background-color: $color-surface-dark;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
-  }
 
   &__header {
     display: flex;
@@ -41,11 +36,7 @@
     margin: 0;
     font-size: 1.125rem;
     font-weight: 700;
-    color: $color-text;
-
-    html.dark & {
-      color: $color-text-dark;
-    }
+    color: var(--color-text);
   }
 
   &__close {
@@ -57,18 +48,13 @@
     border: none;
     background: none;
     border-radius: $radius-sm;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
 
     &:hover {
-      background-color: $color-background;
-      color: $color-text;
-
-      html.dark & {
-        background-color: $color-surface-subtle-dark;
-        color: $color-text-dark;
-      }
+      background-color: var(--color-background);
+      color: var(--color-text);
     }
 
     @include focus-visible;
