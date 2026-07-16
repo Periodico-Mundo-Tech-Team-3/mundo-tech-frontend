@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { MOCK_USERS } from '../mocks/users';
+import { deleteAccount as deleteAccountApi } from '../services/userService';
 
 const STORAGE_KEY = 'mundotech_user';
 
