@@ -8,7 +8,6 @@ import NewArticleForm from "../pages/NewArticleForm/NewArticleForm.jsx";
 import ArticlesInReview from "../pages/ArticlesInReview/ArticlesInReview.jsx";
 import ArticlePreview from "../pages/ArticlePreview/ArticlePreview.jsx";
 import ArticlesPublished from "../pages/ArticlesPublished/ArticlesPublished.jsx";
-import RevisionModal from "../pages/RevisionModal/RevisionModal.jsx";
 
 const NewArticleFormWrapper = () => {
   const location = useLocation();
@@ -101,7 +100,6 @@ export const AppRouter = () => {
                 <Route path="/my-articles" element={<MyArticles />} />
                 <Route path="/new-article" element={<NewArticleFormWrapper />} />
                 <Route path="/in-review" element={<ArticlesInReview />} />
-                <Route path="/review" element={<RevisionModal />} />
                 <Route path="/preview" element={<ArticlePreview />} />
                 <Route path="/published" element={<ArticlesPublished />} />
                 
