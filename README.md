@@ -1,10 +1,10 @@
-# Mundo Tech — Back-office Editorial
+# 📰 Mundo Tech — Editorial Back-Office
 
-Plataforma editorial para la gestión de artículos de Mundo Tech. Permite a autores redactar y enviar contenidos, y a managers revisarlos, publicarlos o rechazarlos.
+Editorial platform for managing Mundo Tech articles. Allows authors to write and submit content, and managers to review, publish, or reject it.
 
-## Equipo de desarrollo
+## 👥 Development Team
 
-| Nombre | Rol | GitHub |
+| Name | Role | GitHub |
 |---|---|---|
 | Damaris Castro | Developer | [@damcb1](https://github.com/damcb1) |
 | Ivanna Caraccio | Developer | [@IvannaRCA](https://github.com/IvannaRCA) |
@@ -13,21 +13,20 @@ Plataforma editorial para la gestión de artículos de Mundo Tech. Permite a aut
 
 ---
 
-
-Repositorios:
+Repositories:
 
 - **Frontend:** [https://github.com/Periodico-Mundo-Tech-Team-3/mundo-tech-frontend]
 - **Backend:** [https://github.com/Periodico-Mundo-Tech-Team-3/mundo-tech-backend]
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 React 19 · Vite 8 · Sass · React Router 6 · Axios · Lucide React · Vitest
 
-## Requisitos
+## 📋 Requirements
 
-Node 18+ y backend Java disponible (por defecto en `localhost:8080`)
+Node 18+ and a running Java backend (default at `localhost:8080`)
 
-## Instalación
+## 💿 Installation
 
 ```bash
 git clone [url]
@@ -36,50 +35,50 @@ npm install
 cp .env.example .env
 ```
 
-## Scripts
+## 📜 Scripts
 
-| Comando | Descripción |
+| Command | Description |
 |---|---|
-| `npm run dev` | Servidor de desarrollo en `localhost:5173` |
-| `npm run build` | Build de producción en `dist/` |
-| `npm run preview` | Previsualizar el build |
-| `npm run lint` | Ejecutar ESLint |
-| `npm test` | Vitest en modo watch |
-| `npm run test:run` | Vitest ejecución única |
+| `npm run dev` | Development server at `localhost:5173` |
+| `npm run build` | Production build to `dist/` |
+| `npm run preview` | Preview the build |
+| `npm run lint` | Run ESLint |
+| `npm test` | Vitest in watch mode |
+| `npm run test:run` | Vitest single run |
 
-## Usuarios mock (desarrollo)
+## 🧪 Mock Users (Development)
 
-7 usuarios precargados. Ver `src/mocks/users.js` para el listado completo.
+7 preloaded users. See `src/mocks/users.js` for the full list.
 
-| Usuario | Email | Password | Roles |
+| User | Email | Password | Roles |
 |---|---|---|---|
 | Sofía Lambert | sofia@mundotech.com | hola7878 | author, manager |
 | Marta Ruiz | marta@mundotech.com | hola1234 | manager |
 | Carlos Peña | carlos@mundotech.com | hola9876 | author |
 
-> En desarrollo el sistema carga automáticamente el último usuario autenticado guardado en localStorage.
+> In development, the system automatically loads the last authenticated user saved in localStorage.
 
-## Roles y permisos
+## 🔐 Roles & Permissions
 
-La lógica está centralizada en `src/utils/permissions.js`.
+Logic is centralized in `src/utils/permissions.js`.
 
-| Permiso | Condición |
+| Permission | Condition |
 |---|---|
-| `canAccessRedaction` | Usuario con rol `author` |
-| `canAccessEditorial` | Usuario con rol `manager` |
-| `canEdit` / `canDelete` | Dueño del artículo |
-| `canSendToReview` | Dueño + status `DRAFT` |
-| `canPublish` / `canReject` | Manager + status `IN_REVIEW` |
+| `canAccessRedaction` | User with `author` role |
+| `canAccessEditorial` | User with `manager` role |
+| `canEdit` / `canDelete` | Article owner |
+| `canSendToReview` | Owner + `DRAFT` status |
+| `canPublish` / `canReject` | Manager + `IN_REVIEW` status |
 
-## Flujo de artículos
+## 📄 Article Workflow
 
 ```
 DRAFT ──(sendToReview)──▶ IN_REVIEW ──(publish)──▶ PUBLISHED
                                 │
-                                └──(reject)──▶ (vuelve a DRAFT del autor)
+                                └──(reject)──▶ (returns to author's DRAFT)
 ```
 
-## Estructura del proyecto
+## 📁 Project Structure
 
 ```
 src/
@@ -89,54 +88,54 @@ src/
 │   └── layout/     # Sidebar, Topbar
 ├── context/        # AuthContext, ThemeContext
 ├── pages/
-│   ├── Login/              # Pantalla de login
-│   ├── MyArticles/         # Lista de artículos del autor (tabs por status)
-│   ├── NewArticleForm/     # Crear/editar artículo (multipart)
-│   ├── ArticlePreview/     # Vista previa antes de enviar a revisión
-│   ├── ArticlesInReview/   # Cola de revisión del manager
-│   └── ArticlesPublished/  # Artículos publicados (manager)
+│   ├── Login/              # Login screen
+│   ├── MyArticles/         # Author's article list (tabs by status)
+│   ├── NewArticleForm/     # Create/edit article (multipart)
+│   ├── ArticlePreview/     # Preview before sending to review
+│   ├── ArticlesInReview/   # Manager's review queue
+│   └── ArticlesPublished/  # Published articles (manager)
 ├── routes/         # AppRouter, ProtectedRoute
 ├── services/       # api.js (axios), articleService.js, userService.js
 ├── utils/          # permissions.js, formatDate.js
-├── mocks/          # users.js (datos de desarrollo)
-├── layouts/        # MainLayout (Sidebar + Topbar + contenido)
-└── styles/         # main.scss, variables, mixins, tema claro/oscuro
+├── mocks/          # users.js (development data)
+├── layouts/        # MainLayout (Sidebar + Topbar + content)
+└── styles/         # main.scss, variables, mixins, light/dark theme
 ```
 
-## API consumida
+## 🔗 API Endpoints
 
-| Método | Endpoint | Descripción |
+| Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/v1/articles` | Listar todos los artículos |
-| `GET` | `/api/v1/articles/:id` | Obtener artículo por ID |
-| `GET` | `/api/v1/articles/status?status=X&userId=Y` | Filtrar por estado |
-| `GET` | `/api/v1/articles/author?authorId=X` | Filtrar por autor |
-| `POST` | `/api/v1/articles/:userId` | Crear artículo (multipart) |
-| `PUT` | `/api/v1/articles/:id/:userId` | Actualizar artículo (multipart) |
-| `DELETE` | `/api/v1/articles/:id/:userId` | Eliminar artículo |
-| `GET` | `/api/v1/articles/:id/submit?userId=X` | Enviar a revisión |
-| `GET` | `/api/v1/articles/:id/publish?userId=X` | Publicar |
-| `GET` | `/api/v1/articles/:id/reject?userId=X` | Rechazar |
-| `DELETE` | `/api/v1/users/:userId` | Eliminar cuenta |
+| `GET` | `/api/v1/articles` | List all articles |
+| `GET` | `/api/v1/articles/:id` | Get article by ID |
+| `GET` | `/api/v1/articles/status?status=X&userId=Y` | Filter by status |
+| `GET` | `/api/v1/articles/author?authorId=X` | Filter by author |
+| `POST` | `/api/v1/articles/:userId` | Create article (multipart) |
+| `PUT` | `/api/v1/articles/:id/:userId` | Update article (multipart) |
+| `DELETE` | `/api/v1/articles/:id/:userId` | Delete article |
+| `GET` | `/api/v1/articles/:id/submit?userId=X` | Submit for review |
+| `GET` | `/api/v1/articles/:id/publish?userId=X` | Publish |
+| `GET` | `/api/v1/articles/:id/reject?userId=X` | Reject |
+| `DELETE` | `/api/v1/users/:userId` | Delete account |
 
-## Tests
+## ✅ Tests
 
-Vitest + jsdom + Testing Library. **87 tests** en 6 archivos.
+Vitest + jsdom + Testing Library. **87 tests** across 6 files.
 
 ```
 test/
-├── setup.js                  # Configuración global (jest-dom, localStorage)
-├── permissions.test.js       # 39 tests — lógica de permisos
-├── formatDate.test.js        #  9 tests — formateo de fechas en español
-├── users.test.js             # 11 tests — integridad de datos mock
-├── AuthContext.test.jsx      # 11 tests — login, logout, deleteAccount, persistencia
-├── articleService.test.js    # 12 tests — URLs, métodos y parámetros de cada endpoint
-└── ProtectedRoute.test.jsx   #  5 tests — redirección según autenticación y permisos
+├── setup.js                  # Global setup (jest-dom, localStorage)
+├── permissions.test.js       # 39 tests — permission logic
+├── formatDate.test.js        #  9 tests — Spanish date formatting
+├── users.test.js             # 11 tests — mock data integrity
+├── AuthContext.test.jsx      # 11 tests — login, logout, deleteAccount, persistence
+├── articleService.test.js    # 12 tests — URLs, methods, and parameters per endpoint
+└── ProtectedRoute.test.jsx   #  5 tests — redirect based on auth and permissions
 ```
 
-Ejecutar:
+Run:
 
 ```bash
-npm test           # modo watch
-npm run test:run   # ejecución única
+npm test           # watch mode
+npm run test:run   # single run
 ```
