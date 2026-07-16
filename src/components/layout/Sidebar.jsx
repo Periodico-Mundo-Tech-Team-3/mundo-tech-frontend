@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { isAuthor, isManager } from '../../utils/permissions';
+import { getArticlesByStatus } from '../../services/articleService';
 import { FileText, PenTool, ClipboardCheck, Globe } from 'lucide-react';
 import { UserSessionWidget } from '../common/UserSessionWidget';
 import './Sidebar.scss';
 
-export const Sidebar = ({ inReviewCount = 3 }) => {
-  const { currentUser, logout } = useAuth(); 
+export const Sidebar = () => {
+  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  const [inReviewCount, setInReviewCount] = useState(0);
+
+  useEffect(() => {
+    if (currentUser && isManager(currentUser)) {
+      getArticlesByStatus('IN_REVIEW', currentUser.id)
+        .then(data => setInReviewCount(Array.isArray(data) ? data.length : 0))
+        .catch(() => setInReviewCount(0));
+    }
+  }, [currentUser]);
 
   const handleLogout = () => {
     logout();
