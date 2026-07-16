@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { getArticlesByStatus } from '../../services/articleService';
 import { isManager } from '../../utils/permissions';
+import { formatDate } from '../../utils/formatDate';
+import { API_URL } from '../../services/api';
 import ArticleCard from '../../components/article/ArticleCard';
+import Modal from '../../components/common/Modal';
+import StatusBadge from '../../components/common/StatusBadge';
+import placeholderArticle from '../../assets/placeholder-article.png';
 import './ArticlesPublished.scss';
 
 const ArticlesPublished = () => {
@@ -10,6 +15,7 @@ const ArticlesPublished = () => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [selectedArticle, setSelectedArticle] = useState(null);
 
     useEffect(() => {
         if (!currentUser) return;
@@ -31,7 +37,7 @@ const ArticlesPublished = () => {
         loadArticles();
     }, [currentUser]);
 
-    const handleViewFull = (article) => console.log('Ver completo', article.id);
+    const handleViewFull = (article) => setSelectedArticle(article);
 
     if (!isManager(currentUser)) {
         return (
@@ -67,6 +73,38 @@ const ArticlesPublished = () => {
                     ))}
                 </div>
             )}
+
+            <Modal
+                isOpen={Boolean(selectedArticle)}
+                onClose={() => setSelectedArticle(null)}
+                size="lg"
+            >
+                {selectedArticle && (
+                    <div className="review-modal">
+                        <div className="review-modal__meta">
+                            <StatusBadge status={selectedArticle.status} />
+                            <span className="review-modal__sender">
+                Enviado por {selectedArticle.author.name} ·{' '}
+                                {formatDate(selectedArticle.publishDate)}
+              </span>
+                        </div>
+
+                        <h2 className="review-modal__title">{selectedArticle.title}</h2>
+
+                        <img
+                            className="review-modal__image"
+                            src={
+                                selectedArticle.image
+                                    ? `${API_URL}/uploads/${selectedArticle.image}`
+                                    : placeholderArticle
+                            }
+                            alt={selectedArticle.image ? `Portada de ${selectedArticle.title}` : ''}
+                        />
+
+                        <p className="review-modal__content">{selectedArticle.content}</p>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 };
