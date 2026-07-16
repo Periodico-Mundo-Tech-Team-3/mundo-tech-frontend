@@ -92,6 +92,7 @@ const MyArticles = () => {
             await loadArticles();
         } catch (err) {
             console.error(err);
+            setDeleteTarget(null);
             setError('No se pudo eliminar el artículo.');
         }
     };
