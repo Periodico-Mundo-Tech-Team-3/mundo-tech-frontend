@@ -1,1 +1,92 @@
-//main scss
+@use "variables" as *;
+
+:root {
+    --color-primary: #{$color-primary};
+    --color-primary-hover: #{$color-primary-hover};
+    --color-on-primary: #ffffff;
+
+    // Light mode
+    --color-background: #{$color-background};
+    --color-surface: #{$color-surface};
+    --color-surface-subtle: #{$color-surface-subtle};
+    --color-text: #{$color-text};
+    --color-text-muted: #{$color-text-muted};
+    --color-border: #{$color-border};
+
+    // Light mode - articles
+    --color-draft-bg: #{$color-draft-bg};
+    --color-draft-text: #{$color-draft-text};
+    --color-review-bg: #{$color-review-bg};
+    --color-review-text: #{$color-review-text};
+    --color-published-bg: #{$color-published-bg};
+    --color-published-text: #{$color-published-text};
+    --color-rejected-bg: #{$color-rejected-bg};
+    --color-rejected-text: #{$color-rejected-text};
+
+    --color-danger: #{$color-danger};
+    --color-danger-hover: #{$color-danger-hover};
+
+    --color-focus-ring: #{$color-primary};
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+html.dark {
+    --color-background: #{$color-background-dark};
+    --color-surface: #{$color-surface-dark};
+    --color-surface-subtle: #{$color-surface-subtle-dark};
+    --color-text: #{$color-text-dark};
+    --color-text-muted: #{$color-text-muted-dark};
+    --color-border: #{$color-border-dark};
+
+    // Dark mode - articles
+    --color-draft-bg: #{$color-draft-bg-dark};
+    --color-draft-text: #{$color-draft-text-dark};
+    --color-review-bg: #{$color-review-bg-dark};
+    --color-review-text: #{$color-review-text-dark};
+    --color-published-bg: #{$color-published-bg-dark};
+    --color-published-text: #{$color-published-text-dark};
+    --color-rejected-bg: #{$color-rejected-bg-dark};
+    --color-rejected-text: #{$color-rejected-text-dark};
+
+    --color-focus-ring: #7fb98f;
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+* {
+    box-sizing: border-box;
+    }
+
+html,
+body,
+#root {
+    height: 100%;
+    }
+
+body {
+    margin: 0;
+    font-family: $font-family-base;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

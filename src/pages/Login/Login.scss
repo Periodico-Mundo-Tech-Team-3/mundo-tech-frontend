@@ -1,1 +1,140 @@
-//Login
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.login-page {
+  @include flex($direction: column, $justify: center, $align: center);
+  min-height: 100vh;
+  width: 100vw;
+  padding: 24px;
+  background: radial-gradient(circle at 75% 30%, #2f6951 0%, $color-sidebar-bg 100%);
+  transition: background 0.15s ease;
+
+  html.dark & {
+    background: radial-gradient(circle at 75% 30%, #173528 0%, #0a1710 100%);
+  }
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 40px !important;
+  background-color: $color-surface;
+  border-radius: $radius-lg;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  border: none !important;
+  text-align: center;
+
+  html.dark & {
+    background-color: $color-surface-dark;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  }
+
+  &__header {
+    margin-bottom: 32px;
+  }
+
+  &__title {
+    font-size: 26px;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0 0 6px 0;
+
+    html.dark & {
+      color: $color-published-text-dark;
+    }
+  }
+
+  &__subtitle {
+    font-size: 13px;
+    color: $color-text-muted;
+    margin: 0;
+
+    html.dark & {
+      color: $color-text-muted-dark;
+    }
+  }
+
+  &__error-alert {
+    background-color: $color-rejected-bg;
+    color: $color-rejected-text;
+    padding: 10px 14px;
+    border-radius: $radius-sm;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    text-align: left;
+    border: 1px solid rgba($color-rejected-text, 0.1);
+
+    html.dark & {
+      background-color: $color-rejected-bg-dark;
+      color: $color-rejected-text-dark;
+    }
+  }
+
+  &__form-group {
+    @include flex($direction: column, $align: flex-start);
+    margin-bottom: 20px;
+    width: 100%;
+
+    label {
+      font-size: 11px;
+      font-weight: 700;
+      color: $color-text-muted;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+
+      html.dark & {
+        color: $color-text-muted-dark;
+      }
+    }
+
+    input {
+      width: 100%;
+      height: 44px;
+      padding: 0 16px;
+      border: 1px solid #e2ded5;
+      border-radius: $radius-md;
+      background-color: $color-surface-subtle;
+      font-size: 14px;
+      color: $color-text;
+      transition: all 0.15s ease;
+
+      html.dark & {
+        background-color: $color-surface-subtle-dark;
+        border-color: $color-border-dark;
+        color: $color-text-dark;
+      }
+
+      &::placeholder {
+        color: rgba($color-text-muted, 0.4);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba($color-primary, 0.12);
+
+        html.dark & {
+          border-color: $color-published-text-dark;
+          box-shadow: 0 0 0 3px rgba($color-published-text-dark, 0.12);
+        }
+      }
+    }
+  }
+
+  &__submit-btn {
+    width: 100%;
+    height: 44px;
+    margin-bottom: 24px;
+  }
+
+  &__footer {
+    font-size: 11px;
+    color: $color-text-muted;
+    margin: 0;
+
+    html.dark & {
+      color: $color-text-muted-dark;
+    }
+  }
+}

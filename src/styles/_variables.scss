@@ -1,1 +1,57 @@
- // variables scss
+$color-primary: #1f4d3a;
+$color-primary-hover: #163a2b;
+
+$color-sidebar-bg: #14301f;
+$color-sidebar-text: #e8ede9;
+$color-sidebar-text-muted: rgba(232, 237, 233, 0.65);
+$color-sidebar-active-bg: rgba(255, 255, 255, 0.08);
+
+$color-background: #f4f1ea;
+$color-surface: #ffffff;
+$color-surface-subtle: #faf8f3;
+$color-text: #202124;
+$color-text-muted: #5f6368;
+$color-border: #dcdcdc;
+
+// Dark mode
+$color-background-dark: #141414;
+$color-surface-dark: #1e1e1e;
+$color-surface-subtle-dark: #262626;
+$color-text-dark: #e8e8e8;
+$color-text-muted-dark: #a0a0a0;
+$color-border-dark: #2e2e2e;
+
+// Article status light
+$color-draft-bg: #fbeecb;
+$color-draft-text: #8a6416;
+$color-review-bg: #dbe9fb;
+$color-review-text: #1a4f8a;
+$color-published-bg: #ddf3e2;
+$color-published-text: #1f6d34;
+$color-rejected-bg: #fbdcdb;
+$color-rejected-text: #a3241d;
+
+// Article status dark
+$color-draft-bg-dark: #3d2f13;
+$color-draft-text-dark: #e0b64a;
+$color-review-bg-dark: #16283d;
+$color-review-text-dark: #7fb0e6;
+$color-published-bg-dark: #16301f;
+$color-published-text-dark: #6dbd85;
+$color-rejected-bg-dark: #3b1a18;
+$color-rejected-text-dark: #e07a72;
+
+$color-danger: #ea4335;
+$color-danger-hover: #c5342a;
+
+$font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+$sidebar-width: 240px;
+
+$radius-sm: 6px;
+$radius-md: 8px;
+$radius-lg: 12px;

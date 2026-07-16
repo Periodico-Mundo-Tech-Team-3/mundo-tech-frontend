@@ -1,1 +1,78 @@
-//Article Form
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.new-article-form {
+  max-width: 720px;
+  margin: 0 auto;
+
+  &__heading {
+    margin: 0 0 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__fields {
+    @include flex(column);
+    gap: 1.25rem;
+  }
+
+  &__meta {
+    @include flex(row, flex-start, stretch);
+    gap: 2rem;
+    padding-top: 0.5rem;
+
+    @include responsive($breakpoint-mobile) {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+
+  &__meta-item {
+    @include flex(column);
+    gap: 0.25rem;
+  }
+
+  &__meta-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  &__meta-value {
+    font-size: 0.9375rem;
+    color: var(--color-text);
+  }
+
+  &__actions {
+    @include flex(row, flex-end, center);
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  &__submit-error {
+    margin: 1.5rem 0 0;
+    font-size: 0.875rem;
+    color: var(--color-danger);
+  }
+}
+
+.success-dialog {
+  &__message {
+    margin: 0 0 1.25rem;
+    font-size: 0.9375rem;
+    color: $color-text;
+    line-height: 1.5;
+
+    html.dark & {
+      color: $color-text-dark;
+    }
+  }
+
+  &__actions {
+    @include flex(row, flex-end, center);
+    gap: 0.75rem;
+  }
+}
