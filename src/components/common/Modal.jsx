@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import './Modal.scss';
 
-const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, title, size = 'md', children }) => {
   const handleKeyDown = useCallback(
     (e) => {
       if (e.key === 'Escape') onClose?.();
@@ -27,7 +27,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div
-        className="modal"
+        className={`modal modal--${size}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
