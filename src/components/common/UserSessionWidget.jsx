@@ -1,11 +1,9 @@
-import React from 'react';
 import { LogOut } from 'lucide-react';
 import './UserSessionWidget.scss';
 
 export const UserSessionWidget = ({ user, onLogout }) => {
   if (!user) return null;
 
-  //Extracción de las iniciales para el avatar en mayúsculas
   const userInitials = user.name
     ? user.name.split(' ').map((word) => word[0]).join('').toUpperCase()
     : 'U';
