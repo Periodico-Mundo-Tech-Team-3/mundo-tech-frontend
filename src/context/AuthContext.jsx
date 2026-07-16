@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { MOCK_USERS } from '../mocks/users';
+import { deleteAccount as deleteAccountApi } from '../services/userService';
 
 const STORAGE_KEY = 'mundotech_user';
 
@@ -46,6 +47,17 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const deleteAccount = async () => {
+    if (!currentUser) return { success: false, error: 'No hay sesión activa' };
+    try {
+      await deleteAccountApi(currentUser.id);
+      setCurrentUser(null);
+      return { success: true };
+    } catch {
+      return { success: false, error: 'No se pudo eliminar la cuenta' };
+    }
+  };
+
   const debugSetUser = (userIndex) => {
     const foundUser = MOCK_USERS[userIndex];
     if (foundUser) {
@@ -61,6 +73,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: Boolean(currentUser),
     login,
     logout,
+    deleteAccount,
     debugSetUser
   };
 
