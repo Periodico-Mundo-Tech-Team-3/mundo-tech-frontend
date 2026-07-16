@@ -5,7 +5,7 @@ import Button from '../../components/common/Button';
 import StatusBadge from '../../components/common/StatusBadge';
 import { formatDate } from '../../utils/formatDate';
 import { submitArticle } from '../../services/articleService';
-import { canSendToReview } from '../../utils/permissions';
+import { canSendToReview, canEdit } from '../../utils/permissions';
 import { API_URL } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import placeholderArticle from '../../assets/placeholder-article.png';
@@ -73,9 +73,11 @@ const ArticlePreview = () => {
           <hr className="article-preview__divider" />
 
           <div className="article-preview__actions">
-            <Button variant="secondary" icon={Pencil} onClick={handleEdit}>
-              Editar
-            </Button>
+            {canEdit(currentUser, article) && (
+                <Button variant="secondary" icon={Pencil} onClick={handleEdit}>
+                  Editar
+                </Button>
+            )}
             {canSendToReview(currentUser, article) && (
                 <Button variant="primary" icon={Send} onClick={handleSendToReview}>
                   Enviar a revisión
