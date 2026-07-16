@@ -1,6 +1,7 @@
 @use "../../styles/mixins" as *;
 
 .article-row-actions {
-  @include flex(row, flex-end, center);
+  @include flex(row, flex-start, center);
   gap: 0.375rem;
+  width: 100%;
 }

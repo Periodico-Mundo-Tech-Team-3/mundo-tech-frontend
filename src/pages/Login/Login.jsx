@@ -76,12 +76,6 @@ export const Login = () => {
           />
         </div>
 
-        <div className="login-card__forgot-container">
-          <a href="#forgot" className="login-card__forgot-link">
-            ¿Olvidaste tu contraseña?
-          </a>
-        </div>
-
         <Button
           type="submit"
           variant="primary"

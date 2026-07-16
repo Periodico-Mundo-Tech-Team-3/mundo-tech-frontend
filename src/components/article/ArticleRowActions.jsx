@@ -17,6 +17,7 @@ const ArticleRowActions = ({
                 <IconButton
                     icon={Pencil}
                     label={`Editar ${article.title}`}
+                    data-tooltip="Editar"
                     variant="neutral"
                     onClick={() => onEdit?.(article)}
                 />
@@ -26,6 +27,7 @@ const ArticleRowActions = ({
                 <IconButton
                     icon={Send}
                     label={`Enviar a revisión ${article.title}`}
+                    data-tooltip="Enviar a revisión"
                     variant="primary"
                     onClick={() => onSendToReview?.(article)}
                 />
@@ -34,6 +36,7 @@ const ArticleRowActions = ({
             <IconButton
                 icon={Eye}
                 label={`Ver ${article.title}`}
+                data-tooltip="Ver completo"
                 variant="neutral"
                 onClick={() => onView?.(article)}
             />
@@ -42,6 +45,7 @@ const ArticleRowActions = ({
                 <IconButton
                     icon={Trash2}
                     label={`Eliminar ${article.title}`}
+                    data-tooltip="Eliminar"
                     variant="danger"
                     onClick={() => onDelete?.(article)}
                 />
