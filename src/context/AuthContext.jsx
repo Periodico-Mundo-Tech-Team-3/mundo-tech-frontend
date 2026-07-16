@@ -3,18 +3,13 @@ import { MOCK_USERS } from '../mocks/users';
 
 const STORAGE_KEY = 'mundotech_user';
 
-// Exportamos explícitamente AuthContext para blindar importaciones antiguas/directas
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) return JSON.parse(stored);
-      
-      // AUTOMOCK PARA DESARROLLO:
-      // Sofía Lambert (índice 2) carga por defecto con ambos roles para pruebas
-      return MOCK_USERS[2]; 
+      return stored ? JSON.parse(stored) : null;
     } catch {
       return null;
     }
@@ -30,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     const foundUser = MOCK_USERS.find(
-      (u) => u.email === email && u.password === password
+        (u) => u.email === email && u.password === password
     );
 
     if (!foundUser) {
@@ -46,22 +41,11 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
-  const debugSetUser = (userIndex) => {
-    const foundUser = MOCK_USERS[userIndex];
-    if (foundUser) {
-      const { password: _omit, ...safeUser } = foundUser;
-      setCurrentUser(safeUser);
-    } else {
-      setCurrentUser(null);
-    }
-  };
-
   const value = {
     currentUser,
     isAuthenticated: Boolean(currentUser),
     login,
     logout,
-    debugSetUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
