@@ -8,6 +8,8 @@ import Tabs from '../../components/common/Tabs';
 import Table from '../../components/common/Table';
 import StatusBadge from '../../components/common/StatusBadge';
 import ArticleRowActions from '../../components/article/ArticleRowActions';
+import Modal from '../../components/common/Modal';
+import Button from '../../components/common/Button';
 import './MyArticles.scss';
 
 const TABS = [
@@ -24,6 +26,7 @@ const MyArticles = () => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [deleteTarget, setDeleteTarget] = useState(null);
 
     // Extraído del useEffect para poder recargar tras una acción.
     const loadArticles = useCallback(async () => {
@@ -78,14 +81,14 @@ const MyArticles = () => {
         }
     };
 
-    const handleDelete = async (article) => {
-        const confirmed = window.confirm(
-            `¿Seguro que quieres eliminar "${article.title}"? Esta acción no se puede deshacer.`
-        );
-        if (!confirmed) return;
+    const handleDelete = (article) => {
+        setDeleteTarget(article);
+    };
 
+    const handleConfirmDelete = async () => {
         try {
-            await deleteArticle(article.id, currentUser.id);
+            await deleteArticle(deleteTarget.id, currentUser.id);
+            setDeleteTarget(null);
             await loadArticles();
         } catch (err) {
             console.error(err);
@@ -150,6 +153,22 @@ const MyArticles = () => {
                     </Table>
                 )}
             </div>
+
+            <Modal
+                isOpen={!!deleteTarget}
+                onClose={() => setDeleteTarget(null)}
+                title="Eliminar artículo"
+            >
+                <p>¿Seguro que quieres eliminar "{deleteTarget?.title}"?</p>
+                <div style={{ display: 'flex', gap: '12px', marginTop: '20px', justifyContent: 'flex-end' }}>
+                    <Button variant="secondary" onClick={() => setDeleteTarget(null)}>
+                        Cancelar
+                    </Button>
+                    <Button variant="danger" onClick={handleConfirmDelete}>
+                        Sí, eliminar
+                    </Button>
+                </div>
+            </Modal>
         </div>
     );
 };
