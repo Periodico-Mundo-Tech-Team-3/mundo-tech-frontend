@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     const foundUser = MOCK_USERS.find(
-        (u) => u.email === email && u.password === password
+      (u) => u.email === email && u.password === password
     );
 
     if (!foundUser) {
@@ -41,11 +41,23 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const deleteAccount = async () => {
+    if (!currentUser) return { success: false, error: 'No hay sesión activa' };
+    try {
+      await deleteAccountApi(currentUser.id);
+      setCurrentUser(null);
+      return { success: true };
+    } catch {
+      return { success: false, error: 'No se pudo eliminar la cuenta' };
+    }
+  };
+
   const value = {
     currentUser,
     isAuthenticated: Boolean(currentUser),
     login,
     logout,
+    deleteAccount,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
