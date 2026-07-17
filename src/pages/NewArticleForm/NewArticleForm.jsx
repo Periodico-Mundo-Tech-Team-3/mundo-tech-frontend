@@ -59,6 +59,7 @@ const NewArticleForm = ({ initialValues, onSubmit, onCancel }) => {
                 title: title.trim(),
                 content: content.trim(),
                 publishDate: new Date().toISOString(),
+                image: typeof image === 'string' ? image : null,
             };
 
             const file = image instanceof File ? image : null;
